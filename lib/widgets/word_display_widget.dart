@@ -99,8 +99,8 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
               borderRadius: BorderRadius.circular(4),
             ),
             // Define how the card's content should be clipped
-            title:
-            Text(widget.wordMeaning.word),
+            title: Padding(padding: const EdgeInsets.only(bottom: 20), 
+              child: Text(widget.wordMeaning.word),),
             subtitle:
             Text(widget.wordMeaning.meanings.isNotEmpty ? widget.wordMeaning.meanings.first: ''),
           ),
