@@ -5,14 +5,16 @@ import '../utils/firebase.dart';
 
 class AddWordWidget extends StatefulWidget {
   AddWordWidget(
-      {required this.word,
+      {
+        super.key,
+        required this.word,
       required this.root,
       required this.phonatic,
       required this.wordClass,
       required this.examples,
       required this.usages,
       required this.meanings,
-      super.key});
+        required this.popupTitle});
 
   String word = '';
   String phonatic = '';
@@ -21,6 +23,7 @@ class AddWordWidget extends StatefulWidget {
   List<String> meanings = [];
   List<String> usages = [];
   List<String> examples = [];
+  String popupTitle = 'Add New Word';
 
   @override
   State<AddWordWidget> createState() {
@@ -37,6 +40,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
   List<String> _meanings = [];
   List<String> _usages = [];
   List<String> _examples = [];
+  String _popupTitle = "Add New Word";
 
   @override
   void initState() {
@@ -48,6 +52,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     _meanings = widget.meanings;
     _usages = widget.usages;
     _examples = widget.examples;
+    _popupTitle = widget.popupTitle;
 
     _wordController.text = _word;
     _phonaticController.text = _phonatic;
@@ -118,7 +123,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
               .top),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("My Word"),
+          title: Text(_popupTitle),
         ),
         body: Form(
           key: _formKey,

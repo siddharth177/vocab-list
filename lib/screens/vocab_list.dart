@@ -45,6 +45,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
             examples: [],
             usages: [],
             meanings: [],
+            popupTitle: 'Add New Word',
           );
         },
         isScrollControlled: true,

@@ -31,6 +31,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
           examples: widget.wordMeaning.examples,
           usages: widget.wordMeaning.usages,
           meanings: widget.wordMeaning.meanings,
+          popupTitle: 'Edit Word',
         );
       },
       isScrollControlled: true,
@@ -94,38 +95,14 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
             ],
           ),
           child: ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.wordMeaning.word,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                Text(widget.wordMeaning.root)
-              ],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
             ),
-            subtitle: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(widget.wordMeaning.wordClass.name),
-                    Text(widget.wordMeaning.phonatic),
-                  ],
-                ),
-                DisplayVocabListElement(
-                  listToDisplay: widget.wordMeaning.meanings,
-                ),
-                DisplayVocabListElement(
-                  listToDisplay: widget.wordMeaning.usages,
-                ),
-                DisplayVocabListElement(
-                    listToDisplay: widget.wordMeaning.examples)
-              ],
-            ),
+            // Define how the card's content should be clipped
+            title:
+            Text(widget.wordMeaning.word),
+            subtitle:
+            Text(widget.wordMeaning.meanings.isNotEmpty ? widget.wordMeaning.meanings.first: ''),
           ),
         ),
       ),
