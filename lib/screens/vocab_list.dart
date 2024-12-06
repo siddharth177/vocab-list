@@ -62,7 +62,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
           children: [
             Expanded(
               child: SearchBar(
-                leading: const Icon(Icons.search),
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                 onChanged: (query) {
                   setState(() {
                     _query = query;
