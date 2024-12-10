@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../models/word_meaning.dart';
 import '../utils/firebase.dart';
 
 class AddWordWidget extends StatefulWidget {
   AddWordWidget(
-      {
-        super.key,
-        required this.word,
+      {super.key,
+      required this.word,
       required this.root,
       required this.phonatic,
       required this.wordClass,
       required this.examples,
       required this.usages,
       required this.definition,
-        required this.popupTitle});
+      required this.isEdit});
 
   String word = '';
   String phonatic = '';
@@ -23,7 +23,7 @@ class AddWordWidget extends StatefulWidget {
   String definition = '';
   List<String> usages = [];
   List<String> examples = [];
-  String popupTitle = 'Add New Word';
+  bool isEdit = false;
 
   @override
   State<AddWordWidget> createState() {
@@ -41,6 +41,8 @@ class _AddWordWidgetState extends State<AddWordWidget> {
   List<String> _usages = [];
   List<String> _examples = [];
   String _popupTitle = "Add New Word";
+  String _saveButton = 'Add Word';
+  String _clearButton = 'Clear';
 
   @override
   void initState() {
@@ -52,7 +54,9 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     _definition = widget.definition;
     _usages = widget.usages;
     _examples = widget.examples;
-    _popupTitle = widget.popupTitle;
+    _popupTitle = widget.isEdit ? 'Edit Word' : 'Add New Word';
+    _saveButton = widget.isEdit ? 'Save' : 'Add';
+    _clearButton = widget.isEdit ? 'Delete' : 'Clear';
 
     _wordController.text = _word;
     _phonaticController.text = _phonatic;
@@ -62,7 +66,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
   final TextEditingController _wordController = TextEditingController();
   final TextEditingController _rootController = TextEditingController();
   final TextEditingController _phonaticController = TextEditingController();
-  final TextEditingController _meaningController = TextEditingController();
+  final TextEditingController _definitionController = TextEditingController();
   final TextEditingController _usageController = TextEditingController();
   final TextEditingController _exampleController = TextEditingController();
 
@@ -99,7 +103,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     _wordController.clear();
     _phonaticController.clear();
     _rootController.clear();
-    _meaningController.clear();
+    _definitionController.clear();
     _exampleController.clear();
     _usageController.clear();
 
@@ -135,7 +139,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: TextFormField(
@@ -197,7 +201,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       ),
                     ),
                     const SizedBox(
-                      width: 40,
+                      width: 20,
                     ),
                     Expanded(
                       child: TextFormField(
@@ -222,7 +226,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     TextFormField(
-                      controller: _meaningController,
+                      controller: _definitionController,
                       decoration: const InputDecoration(
                         label: Text('Meanings'),
                       ),
@@ -274,25 +278,36 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      controller: _exampleController,
-                      decoration: const InputDecoration(
-                        label: Text('Examples'),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: TextFormField(
+                        controller: _exampleController,
+                        decoration: const InputDecoration(
+                          label: Text('Examples'),
+                        ),
+                        onFieldSubmitted: (value) {
+                          if (_examples.isEmpty && widget.examples.isNotEmpty) {
+                            _examples = widget.examples;
+                          }
+                          _examples.add(_exampleController.text);
+                          _exampleController.clear();
+                        },
                       ),
-                      onFieldSubmitted: (value) {
-                        if (_examples.isEmpty && widget.examples.isNotEmpty) {
-                          _examples = widget.examples;
-                        }
-                        _examples.add(_exampleController.text);
-                        _exampleController.clear();
-                      },
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children:
-                          _examples.map((meaning) => Text(meaning)).toList(),
-                    ),
+                    Expanded(child: ListView.builder(
+                      shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: _examples.length,
+                        itemBuilder: (context, index) {
+                        return ListTile(
+                          // contentPadding: const EdgeInsets.all(10),
+                          trailing: IconButton(onPressed: () => _removeExample(index), icon: const Icon(Icons.delete)),
+                          title: GestureDetector(
+                            onTap: () => _editExample(index),
+                            child: Text(_examples[index]),
+                          ),
+                        );
+                    }))
                   ],
                 ),
                 const SizedBox(
@@ -303,14 +318,21 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    ElevatedButton(
-                      onPressed: _clearEntries,
-                      child: const Text('Clear'),
-                    ),
-                    ElevatedButton(
-                      onPressed: _onFormSubmit,
-                      child: const Text('Add Word'),
-                    ),
+                    if (widget.isEdit)
+                      ElevatedButton(
+                        onPressed: _onFormSubmit,
+                        child: Text(_saveButton),
+                      )
+                    else ...[
+                      ElevatedButton(
+                        onPressed: _clearEntries,
+                        child: Text(_clearButton),
+                      ),
+                      ElevatedButton(
+                        onPressed: _onFormSubmit,
+                        child: Text(_saveButton),
+                      ),
+                    ]
                   ],
                 )
               ],
@@ -319,5 +341,19 @@ class _AddWordWidgetState extends State<AddWordWidget> {
         ),
       ),
     );
+  }
+
+  _removeExample(int index) {
+    setState(() {
+      // _exampleController.text = _examples[index];
+      _examples.removeAt(index);
+    });
+  }
+
+  _editExample(int index) {
+    setState(() {
+      _exampleController.text = _examples[index];
+      _examples.removeAt(index);
+    });
   }
 }

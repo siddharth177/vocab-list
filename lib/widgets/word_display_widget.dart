@@ -35,7 +35,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
           examples: widget.wordMeaning.examples,
           usages: widget.wordMeaning.usages,
           definition: widget.wordMeaning.definition,
-          popupTitle: 'Edit Word',
+          isEdit: true,
         );
       },
       isScrollControlled: true,
