@@ -228,7 +228,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                     TextFormField(
                       controller: _definitionController,
                       decoration: const InputDecoration(
-                        label: Text('Meanings'),
+                        label: Text('Definition'),
                       ),
                       onFieldSubmitted: (value) {
                         _definition = value;
@@ -269,47 +269,70 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
-                          _usages.map((meaning) => Text(meaning)).toList(),
+                          _usages.map((meaning){
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _usageController.text = meaning;
+                                  _usages.remove(meaning);
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(meaning),
+                              IconButton(onPressed: (){
+                                setState(() {
+                                  _usages.remove(meaning);
+                                });
+                              }, icon: Icon(Icons.delete)),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                     ),
                   ],
+                ),
+                TextFormField(
+                  controller: _exampleController,
+                  decoration: const InputDecoration(
+                    label: Text('Examples'),
+                  ),
+                  onFieldSubmitted: (value) {
+                    if (_examples.isEmpty && widget.examples.isNotEmpty) {
+                      _examples = widget.examples;
+                    }
+                    _examples.add(_exampleController.text);
+                    _exampleController.clear();
+                  },
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: TextFormField(
-                        controller: _exampleController,
-                        decoration: const InputDecoration(
-                          label: Text('Examples'),
-                        ),
-                        onFieldSubmitted: (value) {
-                          if (_examples.isEmpty && widget.examples.isNotEmpty) {
-                            _examples = widget.examples;
-                          }
-                          _examples.add(_exampleController.text);
-                          _exampleController.clear();
-                        },
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                  _examples.map((meaning){
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _exampleController.text = meaning;
+                          _examples.remove(meaning);
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(meaning),
+                          IconButton(onPressed: (){
+                            setState(() {
+                              _examples.remove(meaning);
+                            });
+                          }, icon: const Icon(Icons.delete)),
+                        ],
                       ),
-                    ),
-                    Expanded(child: ListView.builder(
-                      shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: _examples.length,
-                        itemBuilder: (context, index) {
-                        return ListTile(
-                          // contentPadding: const EdgeInsets.all(10),
-                          trailing: IconButton(onPressed: () => _removeExample(index), icon: const Icon(Icons.delete)),
-                          title: GestureDetector(
-                            onTap: () => _editExample(index),
-                            child: Text(_examples[index]),
-                          ),
-                        );
-                    }))
-                  ],
+                    );
+                  }).toList(),
                 ),
+
                 const SizedBox(
                   height: 20,
                 ),
