@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/word_meaning.dart';
+import '../utils/colors_and_theme.dart';
 import 'add_word_widget.dart';
-import 'display_vocab_list_element.dart';
+import 'word_expanded_display_widget.dart';
 
 class WordDisplayWidget extends StatefulWidget {
   const WordDisplayWidget({required this.wordMeaning, super.key});
@@ -19,6 +21,8 @@ class WordDisplayWidget extends StatefulWidget {
 }
 
 class _WordDisplayWidgetState extends State<WordDisplayWidget> {
+  get wordMeaning =>  widget.wordMeaning;
+
   void _editWordField() {
     showModalBottomSheet(
       context: context,
@@ -30,7 +34,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
           wordClass: widget.wordMeaning.wordClass,
           examples: widget.wordMeaning.examples,
           usages: widget.wordMeaning.usages,
-          meanings: widget.wordMeaning.meanings,
+          definition: widget.wordMeaning.definition,
           popupTitle: 'Edit Word',
         );
       },
@@ -38,18 +42,24 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
     );
   }
 
+  void _openDisplayWordDialog() {
+    showModalBottomSheet(backgroundColor: Colors.transparent, context: context, builder: (ctx) {
+      return DisplayVocabListElement(wordMeaning: wordMeaning);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      color: Theme.of(context).cardTheme.color,
+      color: Color(getColorForWord(widget.wordMeaning.word[0])),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        splashColor: Colors.white,
+        // splashColor: Colors.white,
         // highlightColor: Colors.yellow,
         onTap: () {
-          _editWordField();
+          _openDisplayWordDialog();
         },
         child: Slidable(
           key: ValueKey(widget.wordMeaning.word),
@@ -60,7 +70,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
                 onPressed: (context) {
                   _editWordField();
                 },
-                backgroundColor: Theme.of(context).primaryColor,
+                // backgroundColor: Theme.of(context).cardThe,
                 icon: Icons.edit,
                 label: 'Edit',
               )
@@ -88,7 +98,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
                       .doc(widget.wordMeaning.word)
                       .delete();
                 },
-                backgroundColor: Theme.of(context).disabledColor,
+                // backgroundColor: Theme.of(context).disabledColor,
                 icon: Icons.delete,
                 label: 'Delete',
               )
@@ -100,9 +110,21 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
             ),
             // Define how the card's content should be clipped
             title: Padding(padding: const EdgeInsets.only(bottom: 20), 
-              child: Text(widget.wordMeaning.word),),
+              child: Text(widget.wordMeaning.word,
+              style: GoogleFonts.lato(
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+                color: Color(getColorForWord('WORD_CARD')),
+                fontStyle: FontStyle.normal
+              ),),),
             subtitle:
-            Text(widget.wordMeaning.meanings.isNotEmpty ? widget.wordMeaning.meanings.first: ''),
+            Text(widget.wordMeaning.definition.isNotEmpty ? widget.wordMeaning.definition: ''
+            ,style: GoogleFonts.robotoMono(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w300,
+                color: Color(getColorForWord('WORD_CARD')),
+                fontSize: 20
+              ),),
           ),
         ),
       ),

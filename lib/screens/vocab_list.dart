@@ -44,7 +44,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
             wordClass: WordClass.none,
             examples: [],
             usages: [],
-            meanings: [],
+            definition: '',
             popupTitle: 'Add New Word',
           );
         },
@@ -53,13 +53,9 @@ class _WordsListScreenState extends State<WordsListScreen> {
     }
 
     return Scaffold(
+      backgroundColor: const Color(0xfffafbfd),
       appBar: AppBar(
         toolbarHeight: 80,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage('assets/images/samleimag2.jpg'), fit: BoxFit.cover)
-          ),
-        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,

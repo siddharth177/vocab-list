@@ -13,14 +13,14 @@ class AddWordWidget extends StatefulWidget {
       required this.wordClass,
       required this.examples,
       required this.usages,
-      required this.meanings,
+      required this.definition,
         required this.popupTitle});
 
   String word = '';
   String phonatic = '';
   String root = '';
   WordClass wordClass = WordClass.none;
-  List<String> meanings = [];
+  String definition = '';
   List<String> usages = [];
   List<String> examples = [];
   String popupTitle = 'Add New Word';
@@ -37,7 +37,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
   String _phonatic = '';
   String _root = '';
   WordClass _wordClass = WordClass.none;
-  List<String> _meanings = [];
+  String _definition = '';
   List<String> _usages = [];
   List<String> _examples = [];
   String _popupTitle = "Add New Word";
@@ -49,7 +49,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     _phonatic = widget.phonatic;
     _root = widget.root;
     _wordClass = widget.wordClass;
-    _meanings = widget.meanings;
+    _definition = widget.definition;
     _usages = widget.usages;
     _examples = widget.examples;
     _popupTitle = widget.popupTitle;
@@ -72,7 +72,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
       var newWord = WordMeaning(
         word: _word,
-        meanings: _meanings,
+        definition: _definition,
         usages: _usages,
         examples: _examples,
         wordClass: _wordClass,
@@ -108,7 +108,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
       _phonatic = '';
       _root = '';
       _wordClass = WordClass.none;
-      _meanings = [];
+      _definition = '';
       _usages = [];
       _examples = [];
     });
@@ -227,19 +227,20 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                         label: Text('Meanings'),
                       ),
                       onFieldSubmitted: (value) {
-                        if (_meanings.isEmpty && widget.meanings.isNotEmpty) {
-                          _meanings = widget.meanings;
-                        }
-                        _meanings.add(_meaningController.text);
-                        _meaningController.clear();
+                        _definition = value;
+                        // if (_definition.isEmpty && widget.definition.isNotEmpty) {
+                        //   _definition = widget.definition;
+                        // }
+                        // _definition.add(_meaningController.text);
+                        // _meaningController.clear();
                       },
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children:
-                          _meanings.map((meaning) => Text(meaning)).toList(),
-                    ),
+                    // Column(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children:
+                    //       _definition.map((meaning) => Text(meaning)).toList(),
+                    // ),
                   ],
                 ),
                 Column(
