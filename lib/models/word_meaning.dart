@@ -17,7 +17,7 @@ enum WordClass {
 class WordMeaning {
   String id;
   String word = '';
-  List<String> meanings = [];
+  String definition = '';
   List<String> usages = [];
   List<String> examples = [];
   WordClass wordClass = WordClass.none;
@@ -26,7 +26,7 @@ class WordMeaning {
 
   WordMeaning({
     required this.word,
-    required this.meanings,
+    required this.definition,
     required this.usages,
     required this.examples,
     required this.wordClass,
@@ -36,15 +36,15 @@ class WordMeaning {
 
   WordMeaning.word(this.word) : id = uuid.v4();
 
-  WordMeaning.meanings(this.word, this.meanings) : id = uuid.v4();
+  WordMeaning.definition(this.word, this.definition) : id = uuid.v4();
 
-  WordMeaning.usages(this.word, this.meanings, this.usages) : id = uuid.v4();
+  WordMeaning.usages(this.word, this.definition, this.usages) : id = uuid.v4();
 
-  WordMeaning.examples(this.word, this.meanings, this.usages, this.examples)
+  WordMeaning.examples(this.word, this.definition, this.usages, this.examples)
       : id = uuid.v4();
 
   WordMeaning.wordClass(
-      this.word, this.meanings, this.usages, this.examples, this.wordClass)
+      this.word, this.definition, this.usages, this.examples, this.wordClass)
       : id = uuid.v4();
 
   factory WordMeaning.fromFirestore(
@@ -53,8 +53,8 @@ class WordMeaning {
     final data = snapshot.data();
     return WordMeaning(
         word: data?['word'],
-        meanings:
-            data?['meanings'] is Iterable ? List.from(data?['meanings']) : [],
+        definition:
+            data?['definition'],
         usages: data?['usages'] is Iterable ? List.from(data?['usages']) : [],
         examples:
             data?['examples'] is Iterable ? List.from(data?['examples']) : [],
@@ -80,7 +80,7 @@ class WordMeaning {
   Map<String, dynamic> toFirestore() {
     return {
       'word': word,
-      'meanings': meanings,
+      'definition': definition,
       'usages': usages,
       'examples': examples,
       'wordClass': wordClass.name,

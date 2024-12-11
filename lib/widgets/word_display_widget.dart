@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/word_meaning.dart';
+import '../utils/colors_and_theme.dart';
 import 'add_word_widget.dart';
-import 'display_vocab_list_element.dart';
+import 'word_expanded_display_widget.dart';
 
 class WordDisplayWidget extends StatefulWidget {
   const WordDisplayWidget({required this.wordMeaning, super.key});
@@ -19,6 +21,8 @@ class WordDisplayWidget extends StatefulWidget {
 }
 
 class _WordDisplayWidgetState extends State<WordDisplayWidget> {
+  get wordMeaning =>  widget.wordMeaning;
+
   void _editWordField() {
     showModalBottomSheet(
       context: context,
@@ -30,11 +34,18 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
           wordClass: widget.wordMeaning.wordClass,
           examples: widget.wordMeaning.examples,
           usages: widget.wordMeaning.usages,
-          meanings: widget.wordMeaning.meanings,
+          definition: widget.wordMeaning.definition,
+          isEdit: true,
         );
       },
       isScrollControlled: true,
     );
+  }
+
+  void _openDisplayWordDialog() {
+    showModalBottomSheet(backgroundColor: Colors.transparent, context: context, builder: (ctx) {
+      return DisplayVocabListElement(wordMeaning: wordMeaning);
+    });
   }
 
   @override
@@ -42,13 +53,13 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      color: Theme.of(context).cardTheme.color,
+      color: Theme.of(context).colorScheme.primary,
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        splashColor: Colors.white,
+        // splashColor: Colors.white,
         // highlightColor: Colors.yellow,
         onTap: () {
-          _editWordField();
+          _openDisplayWordDialog();
         },
         child: Slidable(
           key: ValueKey(widget.wordMeaning.word),
@@ -56,10 +67,10 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
             motion: const DrawerMotion(),
             children: [
               SlidableAction(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 onPressed: (context) {
                   _editWordField();
                 },
-                backgroundColor: Theme.of(context).primaryColor,
                 icon: Icons.edit,
                 label: 'Edit',
               )
@@ -87,45 +98,37 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
                       .doc(widget.wordMeaning.word)
                       .delete();
                 },
-                backgroundColor: Theme.of(context).disabledColor,
+                backgroundColor: Theme.of(context).colorScheme.error,
                 icon: Icons.delete,
                 label: 'Delete',
               )
             ],
           ),
           child: ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.wordMeaning.word,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                Text(widget.wordMeaning.root)
-              ],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
             ),
-            subtitle: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(widget.wordMeaning.wordClass.name),
-                    Text(widget.wordMeaning.phonatic),
-                  ],
-                ),
-                DisplayVocabListElement(
-                  listToDisplay: widget.wordMeaning.meanings,
-                ),
-                DisplayVocabListElement(
-                  listToDisplay: widget.wordMeaning.usages,
-                ),
-                DisplayVocabListElement(
-                    listToDisplay: widget.wordMeaning.examples)
-              ],
-            ),
+            // Define how the card's content should be clipped
+            title: Padding(padding: const EdgeInsets.only(bottom: 20), 
+              child: Text(widget.wordMeaning.word,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.lato(color: Colors.black,
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+
+                fontStyle: FontStyle.normal
+              ),),),
+            subtitle:
+            Text(widget.wordMeaning.definition.isNotEmpty ? widget.wordMeaning.definition: '\n',
+              maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.robotoMono(color: Colors.white,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w300,
+
+                fontSize: 20
+              ),),
           ),
         ),
       ),

@@ -44,7 +44,8 @@ class _WordsListScreenState extends State<WordsListScreen> {
             wordClass: WordClass.none,
             examples: [],
             usages: [],
-            meanings: [],
+            definition: '',
+            isEdit: false,
           );
         },
         isScrollControlled: true,
@@ -52,9 +53,8 @@ class _WordsListScreenState extends State<WordsListScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      backgroundColor: const Color(0xfffafbfd),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         toolbarHeight: 80,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -123,6 +123,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
               .toList();
 
           return ListView.builder(
+            padding: const EdgeInsets.only(bottom: 20),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: _filteredVocabList.length,
