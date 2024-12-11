@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:rive/rive.dart';
 import 'package:vocab_list/services/groq_llama.dart';
+import 'package:vocab_list/widgets/postioned_loading_widget.dart';
 
 import '../models/word_meaning.dart';
 import '../utils/firebase.dart';
@@ -61,10 +61,10 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     _saveButton = widget.isEdit ? 'Save' : 'Add';
     _clearButton = widget.isEdit ? 'Delete' : 'Clear';
 
+    _definitionController.text = _definition;
     _wordController.text = _word;
     _phonaticController.text = _phonatic;
     _rootController.text = _root;
-
   }
 
   final TextEditingController _wordController = TextEditingController();
@@ -123,8 +123,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
   }
 
   Future<void> _fetchWordData(kWord) async {
-    print('fetching data');
-    if(kWord.isEmpty) {
+    if (kWord.isEmpty) {
       return;
     }
 
@@ -139,15 +138,14 @@ class _AddWordWidgetState extends State<AddWordWidget> {
       _root = wordData['root'] ?? '';
       _wordClass = _getWordClassFromString(wordData['wordType']);
       _definition = wordData['definition'] ?? '';
-      _usages = _getStringListFromApiData(wordData['usages']);
-      _examples = _getStringListFromApiData(wordData['examples']);
+      _usages.addAll(_getStringListFromApiData(wordData['usages']));
+      _examples.addAll(_getStringListFromApiData(wordData['examples']));
 
       _wordController.text = _word;
       _phonaticController.text = _phonatic;
       _rootController.text = _root;
       _definitionController.text = _definition;
     } catch (e) {
-      print('Error fetching data from api');
     } finally {
       setState(() {
         _isLoading = false;
@@ -160,10 +158,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     if (wordClassString != null) {
       try {
         return WordClass.values.byName(wordClassString);
-      } catch (e) {
-        // Handle invalid word class string
-        print('Invalid word class string: $wordClassString');
-      }
+      } catch (e) {}
     }
     return WordClass.none;
   }
@@ -228,31 +223,20 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                     Expanded(
                       child: Stack(
                         children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _rootController,
-                              decoration: const InputDecoration(
-                                label: Text("Root"),
-                              ),
-                              onSaved: (value) {
-                                _root = value!;
-                              },
+                          TextFormField(
+                            controller: _rootController,
+                            decoration: const InputDecoration(
+                              label: Text("Root"),
                             ),
+                            onSaved: (value) {
+                              _root = value!;
+                            },
                           ),
                           if (_isLoading) // Only show the loading indicator when isLoading is true
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              bottom: 0,
-                              left: 0,
-                              child: RiveAnimation.asset(
-                                speedMultiplier: 3,
-                              'assets/animations/rive/dot_loading.riv'),
-                            ),
+                            const PostionedLoadingWidget(),
                         ],
                       ),
                     )
-
                   ],
                 ),
                 const SizedBox(
@@ -264,38 +248,50 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
-                      child: DropdownMenu<WordClass>(
-                        initialSelection: _wordClass != WordClass.none
-                            ? _wordClass
-                            : WordClass.none,
-                        requestFocusOnTap: true,
-                        label: const Text('Word Class'),
-                        dropdownMenuEntries: WordClass.values
-                            .map<DropdownMenuEntry<WordClass>>((e) =>
-                                DropdownMenuEntry<WordClass>(
-                                    value: e, label: e.name))
-                            .toList(),
-                        onSelected: (value) {
-                          _wordClass = value!;
-                        },
+                      child: Stack(
+                        children: [
+                          DropdownMenu<WordClass>(
+                            initialSelection: _wordClass != WordClass.none
+                                ? _wordClass
+                                : WordClass.none,
+                            requestFocusOnTap: true,
+                            label: const Text('Word Class'),
+                            dropdownMenuEntries: WordClass.values
+                                .map<DropdownMenuEntry<WordClass>>((e) =>
+                                    DropdownMenuEntry<WordClass>(
+                                        value: e, label: e.name))
+                                .toList(),
+                            onSelected: (value) {
+                              _wordClass = value!;
+                            },
+                          ),
+                          if (_isLoading) // Only show the loading indicator when isLoading is true
+                            const PostionedLoadingWidget(),
+                        ],
                       ),
                     ),
                     const SizedBox(
                       width: 20,
                     ),
                     Expanded(
-                      child: TextFormField(
-                        controller: _phonaticController,
-                        decoration: const InputDecoration(
-                          label: Text('Phonatic'),
-                        ),
-                        onSaved: (value) {
-                          if (value == null || value.trim().length <= 1) {
-                            return;
-                          } else {
-                            _phonatic = value;
-                          }
-                        },
+                      child: Stack(
+                        children: [
+                          TextFormField(
+                            controller: _phonaticController,
+                            decoration: const InputDecoration(
+                              label: Text('Phonatic'),
+                            ),
+                            onSaved: (value) {
+                              if (value == null || value.trim().length <= 1) {
+                                return;
+                              } else {
+                                _phonatic = value;
+                              }
+                            },
+                          ),
+                          if (_isLoading) // Only show the loading indicator when isLoading is true
+                            const PostionedLoadingWidget(),
+                        ],
                       ),
                     ),
                   ],
@@ -305,19 +301,25 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      controller: _definitionController,
-                      decoration: const InputDecoration(
-                        label: Text('Definition'),
-                      ),
-                      onFieldSubmitted: (value) {
-                        _definition = value;
-                        // if (_definition.isEmpty && widget.definition.isNotEmpty) {
-                        //   _definition = widget.definition;
-                        // }
-                        // _definition.add(_meaningController.text);
-                        // _meaningController.clear();
-                      },
+                    Stack(
+                      children: [
+                        TextFormField(
+                          controller: _definitionController,
+                          decoration: const InputDecoration(
+                            label: Text('Definition'),
+                          ),
+                          onFieldSubmitted: (value) {
+                            _definition = value;
+                            // if (_definition.isEmpty && widget.definition.isNotEmpty) {
+                            //   _definition = widget.definition;
+                            // }
+                            // _definition.add(_meaningController.text);
+                            // _meaningController.clear();
+                          },
+                        ),
+                        if (_isLoading) // Only show the loading indicator when isLoading is true
+                          const PostionedLoadingWidget(),
+                      ],
                     ),
                     // Column(
                     //   mainAxisAlignment: MainAxisAlignment.start,
@@ -332,44 +334,53 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      controller: _usageController,
-                      decoration: const InputDecoration(
-                        label: Text('Usages'),
-                      ),
-                      onFieldSubmitted: (value) {
-                        if (_usages.isEmpty && widget.usages.isNotEmpty) {
-                          _usages = widget.usages;
-                        }
-                        _usages.add(_usageController.text);
-                        _usageController.clear();
-                      },
+                    Stack(
+                      children: [
+                        TextFormField(
+                          controller: _usageController,
+                          decoration: const InputDecoration(
+                            label: Text('Usages'),
+                          ),
+                          onFieldSubmitted: (value) {
+                            if (_usages.isEmpty && widget.usages.isNotEmpty) {
+                              _usages = widget.usages;
+                            }
+                            setState(() {
+                              _usages.add(_usageController.text);
+                              _usageController.clear();
+                            });
+                          },
+                        ),
+                        if (_isLoading) // Only show the loading indicator when isLoading is true
+                          const PostionedLoadingWidget(),
+                      ],
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children:
-                          _usages.map((meaning){
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _usageController.text = meaning;
-                                  _usages.remove(meaning);
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(child: Text(meaning)),
-                              IconButton(onPressed: (){
-                                setState(() {
-                                  _usages.remove(meaning);
-                                });
-                              }, icon: Icon(Icons.delete)),
-                                ],
-                              ),
-                            );
-                          }).toList(),
+                      children: _usages.map((meaning) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _usageController.text = meaning;
+                              _usages.remove(meaning);
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(child: Text(meaning)),
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _usages.remove(meaning);
+                                    });
+                                  },
+                                  icon: Icon(Icons.delete)),
+                            ],
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ],
                 ),
@@ -378,24 +389,32 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      controller: _exampleController,
-                      decoration: const InputDecoration(
-                        label: Text('Examples'),
-                      ),
-                      onFieldSubmitted: (value) {
-                        if (_examples.isEmpty && widget.examples.isNotEmpty) {
-                          _examples = widget.examples;
-                        }
-                        _examples.add(_exampleController.text);
-                        _exampleController.clear();
-                      },
+                    Stack(
+                      children: [
+                        TextFormField(
+                          controller: _exampleController,
+                          decoration: const InputDecoration(
+                            label: Text('Examples'),
+                          ),
+                          onFieldSubmitted: (value) {
+                            if (_examples.isEmpty &&
+                                widget.examples.isNotEmpty) {
+                              _examples = widget.examples;
+                            }
+                            setState(() {
+                              _examples.add(_exampleController.text);
+                              _exampleController.clear();
+                            });
+                          },
+                        ),
+                        if (_isLoading) // Only show the loading indicator when isLoading is true
+                          const PostionedLoadingWidget(),
+                      ],
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children:
-                      _examples.map((meaning){
+                      children: _examples.map((meaning) {
                         return GestureDetector(
                           onTap: () {
                             setState(() {
@@ -407,11 +426,13 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Expanded(child: Text(meaning)),
-                              IconButton(onPressed: (){
-                                setState(() {
-                                  _examples.remove(meaning);
-                                });
-                              }, icon: const Icon(Icons.delete)),
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _examples.remove(meaning);
+                                    });
+                                  },
+                                  icon: const Icon(Icons.delete)),
                             ],
                           ),
                         );
@@ -419,7 +440,6 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                     ),
                   ],
                 ),
-
                 const SizedBox(
                   height: 20,
                 ),
@@ -451,19 +471,5 @@ class _AddWordWidgetState extends State<AddWordWidget> {
         ),
       ),
     );
-  }
-
-  _removeExample(int index) {
-    setState(() {
-      // _exampleController.text = _examples[index];
-      _examples.removeAt(index);
-    });
-  }
-
-  _editExample(int index) {
-    setState(() {
-      _exampleController.text = _examples[index];
-      _examples.removeAt(index);
-    });
   }
 }
