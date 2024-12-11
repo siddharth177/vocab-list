@@ -53,7 +53,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      color: Color(getColorForWord(widget.wordMeaning.word[0])),
+      color: Theme.of(context).colorScheme.primary,
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         // splashColor: Colors.white,
@@ -67,10 +67,10 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
             motion: const DrawerMotion(),
             children: [
               SlidableAction(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 onPressed: (context) {
                   _editWordField();
                 },
-                // backgroundColor: Theme.of(context).cardThe,
                 icon: Icons.edit,
                 label: 'Edit',
               )
@@ -98,7 +98,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
                       .doc(widget.wordMeaning.word)
                       .delete();
                 },
-                // backgroundColor: Theme.of(context).disabledColor,
+                backgroundColor: Theme.of(context).colorScheme.error,
                 icon: Icons.delete,
                 label: 'Delete',
               )
@@ -111,18 +111,22 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
             // Define how the card's content should be clipped
             title: Padding(padding: const EdgeInsets.only(bottom: 20), 
               child: Text(widget.wordMeaning.word,
-              style: GoogleFonts.lato(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.lato(color: Colors.black,
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
-                color: Color(getColorForWord('WORD_CARD')),
+
                 fontStyle: FontStyle.normal
               ),),),
             subtitle:
-            Text(widget.wordMeaning.definition.isNotEmpty ? widget.wordMeaning.definition: ''
-            ,style: GoogleFonts.robotoMono(
+            Text(widget.wordMeaning.definition.isNotEmpty ? widget.wordMeaning.definition: '\n',
+              maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.robotoMono(color: Colors.white,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w300,
-                color: Color(getColorForWord('WORD_CARD')),
+
                 fontSize: 20
               ),),
           ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rive/rive.dart';
+import 'package:vocab_list/services/groq_llama.dart';
 
 import '../models/word_meaning.dart';
 import '../utils/firebase.dart';
@@ -43,6 +45,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
   String _popupTitle = "Add New Word";
   String _saveButton = 'Add Word';
   String _clearButton = 'Clear';
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -61,6 +64,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     _wordController.text = _word;
     _phonaticController.text = _phonatic;
     _rootController.text = _root;
+
   }
 
   final TextEditingController _wordController = TextEditingController();
@@ -118,6 +122,62 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     });
   }
 
+  Future<void> _fetchWordData(kWord) async {
+    print('fetching data');
+    if(kWord.isEmpty) {
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final wordData = await getWordData(kWord);
+      _word = kWord ?? '';
+      _phonatic = wordData['phonetic'] ?? '';
+      _root = wordData['root'] ?? '';
+      _wordClass = _getWordClassFromString(wordData['wordType']);
+      _definition = wordData['definition'] ?? '';
+      _usages = _getStringListFromApiData(wordData['usages']);
+      _examples = _getStringListFromApiData(wordData['examples']);
+
+      _wordController.text = _word;
+      _phonaticController.text = _phonatic;
+      _rootController.text = _root;
+      _definitionController.text = _definition;
+    } catch (e) {
+      print('Error fetching data from api');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  // Helper function to convert string to WordClass enum
+  WordClass _getWordClassFromString(String? wordClassString) {
+    if (wordClassString != null) {
+      try {
+        return WordClass.values.byName(wordClassString);
+      } catch (e) {
+        // Handle invalid word class string
+        print('Invalid word class string: $wordClassString');
+      }
+    }
+    return WordClass.none;
+  }
+
+  // Helper function to extract string list from API data
+  List<String> _getStringListFromApiData(dynamic apiData) {
+    if (apiData is String) {
+      return apiData.split(';').map((s) => s.trim()).toList();
+    } else if (apiData is List) {
+      return apiData.cast<String>();
+    }
+    return [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -154,6 +214,9 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
                           return null;
                         },
+                        onFieldSubmitted: (v) {
+                          _fetchWordData(v);
+                        },
                         onSaved: (value) {
                           _word = value!;
                         },
@@ -163,16 +226,33 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       width: 20,
                     ),
                     Expanded(
-                      child: TextFormField(
-                        controller: _rootController,
-                        decoration: const InputDecoration(
-                          label: Text("Root"),
-                        ),
-                        onSaved: (value) {
-                          _root = value!;
-                        },
+                      child: Stack(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _rootController,
+                              decoration: const InputDecoration(
+                                label: Text("Root"),
+                              ),
+                              onSaved: (value) {
+                                _root = value!;
+                              },
+                            ),
+                          ),
+                          if (_isLoading) // Only show the loading indicator when isLoading is true
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              bottom: 0,
+                              left: 0,
+                              child: RiveAnimation.asset(
+                                speedMultiplier: 3,
+                              'assets/animations/rive/dot_loading.riv'),
+                            ),
+                        ],
                       ),
-                    ),
+                    )
+
                   ],
                 ),
                 const SizedBox(
@@ -280,7 +360,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(meaning),
+                                  Expanded(child: Text(meaning)),
                               IconButton(onPressed: (){
                                 setState(() {
                                   _usages.remove(meaning);
@@ -293,44 +373,51 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                     ),
                   ],
                 ),
-                TextFormField(
-                  controller: _exampleController,
-                  decoration: const InputDecoration(
-                    label: Text('Examples'),
-                  ),
-                  onFieldSubmitted: (value) {
-                    if (_examples.isEmpty && widget.examples.isNotEmpty) {
-                      _examples = widget.examples;
-                    }
-                    _examples.add(_exampleController.text);
-                    _exampleController.clear();
-                  },
-                ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                  _examples.map((meaning){
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _exampleController.text = meaning;
-                          _examples.remove(meaning);
-                        });
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: _exampleController,
+                      decoration: const InputDecoration(
+                        label: Text('Examples'),
+                      ),
+                      onFieldSubmitted: (value) {
+                        if (_examples.isEmpty && widget.examples.isNotEmpty) {
+                          _examples = widget.examples;
+                        }
+                        _examples.add(_exampleController.text);
+                        _exampleController.clear();
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(meaning),
-                          IconButton(onPressed: (){
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:
+                      _examples.map((meaning){
+                        return GestureDetector(
+                          onTap: () {
                             setState(() {
+                              _exampleController.text = meaning;
                               _examples.remove(meaning);
                             });
-                          }, icon: const Icon(Icons.delete)),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(child: Text(meaning)),
+                              IconButton(onPressed: (){
+                                setState(() {
+                                  _examples.remove(meaning);
+                                });
+                              }, icon: const Icon(Icons.delete)),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(

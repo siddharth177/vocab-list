@@ -123,6 +123,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
               .toList();
 
           return ListView.builder(
+            padding: const EdgeInsets.only(bottom: 20),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: _filteredVocabList.length,
