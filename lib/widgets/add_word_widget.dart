@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:vocab_list/services/groq_llama.dart';
+import 'package:vocab_list/utils/snackbar_messaging.dart';
 import 'package:vocab_list/widgets/postioned_loading_widget.dart';
 
 import '../models/word_meaning.dart';
@@ -133,6 +134,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
     try {
       final wordData = await getWordData(kWord);
+      clearAndDisplaySnackbar(context, 'data fetched from llama model successfully', duration: 1);
       _word = kWord ?? '';
       _phonatic = wordData['phonetic'] ?? '';
       _root = wordData['root'] ?? '';
