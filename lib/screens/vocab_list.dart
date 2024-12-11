@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/word_meaning.dart';
 import '../utils/firebase.dart';
@@ -21,7 +22,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
   List<WordMeaning> _vocabList = [];
   List<WordMeaning> _filteredVocabList = [];
 
-  final TextEditingController _controller = TextEditingController();
+  TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
@@ -55,38 +56,52 @@ class _WordsListScreenState extends State<WordsListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xfffafbfd),
       appBar: AppBar(
-        toolbarHeight: 80,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        toolbarHeight: 130,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: SearchBar(
-                shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                onChanged: (query) {
-                  setState(() {
-                    _query = query;
-                  });
-                },
-                trailing: [
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _query = '';
-                        });
-                      },
-                      icon: const Icon(Icons.clear)),
-                ],
-              ),
-            ),
+            Text('My Vocab List',
+            style: GoogleFonts.poppins(
+              fontSize: 30,
+              fontWeight: FontWeight.w600,
+              color: Colors.white70
+            )),
             const SizedBox(
-              width: 8,
+              height: 10,
             ),
-            IconButton(
-                onPressed: () {
-                  firebaseAuthInstance.signOut();
-                },
-                icon: const Icon(Icons.logout))
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: SearchBar(hintText: 'search for a word',
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                    onChanged: (query) {
+                      setState(() {
+                        _query = query;
+                      });
+                    },
+                    trailing: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _query = '';
+                            });
+                          },
+                          icon: const Icon(Icons.clear)),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                IconButton(
+                    onPressed: () {
+                      firebaseAuthInstance.signOut();
+                    },
+                    icon: const Icon(Icons.logout))
+              ],
+            ),
           ],
         ),
       ),

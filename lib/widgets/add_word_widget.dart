@@ -134,14 +134,14 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
     try {
       final wordData = await getWordData(kWord);
-      clearAndDisplaySnackbar(context, 'data fetched from llama model successfully', duration: 1);
+      clearAndDisplaySnackbar(context, 'details for $kWord fetched from llama model successfully', duration: 1);
       _word = kWord ?? '';
       _phonatic = wordData['phonetic'] ?? '';
       _root = wordData['root'] ?? '';
       _wordClass = _getWordClassFromString(wordData['wordType']);
       _definition = wordData['definition'] ?? '';
-      _usages.addAll(_getStringListFromApiData(wordData['usages']));
-      _examples.addAll(_getStringListFromApiData(wordData['examples']));
+      _usages = (_getStringListFromApiData(wordData['usages']));
+      _examples = (_getStringListFromApiData(wordData['examples']));
 
       _wordController.text = _word;
       _phonaticController.text = _phonatic;
