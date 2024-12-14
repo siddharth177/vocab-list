@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vocab_list/utils/colors_and_theme.dart';
 
 import '../models/word_meaning.dart';
-import '../utils/colors_and_theme.dart';
 import 'add_word_widget.dart';
 import 'word_expanded_display_widget.dart';
 
@@ -21,7 +21,7 @@ class WordDisplayWidget extends StatefulWidget {
 }
 
 class _WordDisplayWidgetState extends State<WordDisplayWidget> {
-  get wordMeaning =>  widget.wordMeaning;
+  get wordMeaning => widget.wordMeaning;
 
   void _editWordField() {
     showModalBottomSheet(
@@ -43,9 +43,12 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
   }
 
   void _openDisplayWordDialog() {
-    showModalBottomSheet(backgroundColor: Colors.transparent, context: context, builder: (ctx) {
-      return DisplayVocabListElement(wordMeaning: wordMeaning);
-    });
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (ctx) {
+          return DisplayVocabListElement(wordMeaning: wordMeaning);
+        });
   }
 
   @override
@@ -53,7 +56,6 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      color: Theme.of(context).colorScheme.primary,
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         // splashColor: Colors.white,
@@ -67,7 +69,8 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
             motion: const DrawerMotion(),
             children: [
               SlidableAction(
-                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundColor:
+                    Theme.of(context).brightness == Brightness.dark ? kDarkPrimaryColor : Theme.of(context).colorScheme.secondaryContainer,
                 onPressed: (context) {
                   _editWordField();
                 },
@@ -98,7 +101,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
                       .doc(widget.wordMeaning.word)
                       .delete();
                 },
-                backgroundColor: Theme.of(context).colorScheme.error,
+                backgroundColor: Theme.of(context).brightness == Brightness.dark ? Color(0xFF660F09) : Theme.of(context).colorScheme.errorContainer,
                 icon: Icons.delete,
                 label: 'Delete',
               )
@@ -109,26 +112,37 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
               borderRadius: BorderRadius.circular(4),
             ),
             // Define how the card's content should be clipped
-            title: Padding(padding: const EdgeInsets.only(bottom: 20), 
-              child: Text(widget.wordMeaning.word,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.lato(color: Colors.black,
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-
-                fontStyle: FontStyle.normal
-              ),),),
-            subtitle:
-            Text(widget.wordMeaning.definition.isNotEmpty ? widget.wordMeaning.definition: '\n',
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Text(
+                widget.wordMeaning.word,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.openSans(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? kLightWhiteShade1
+                      : null,
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+            ),
+            subtitle: Text(
+              widget.wordMeaning.definition.isNotEmpty
+                  ? widget.wordMeaning.definition
+                  : '\n',
               maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.robotoMono(color: Colors.white,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.roboto(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w300,
-
-                fontSize: 20
-              ),),
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? kDarkWhiteShade1
+                    : null,
+                fontSize: 20,
+              ),
+            ),
           ),
         ),
       ),

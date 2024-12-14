@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
 import 'package:vocab_list/services/groq_llama.dart';
 import 'package:vocab_list/utils/snackbar_messaging.dart';
 import 'package:vocab_list/widgets/postioned_loading_widget.dart';
@@ -123,8 +122,8 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     });
   }
 
-  Future<void> _fetchWordData(kWord) async {
-    if (kWord.isEmpty) {
+  Future<void> _fetchWordData(inputWord) async {
+    if (inputWord.isEmpty) {
       return;
     }
 
@@ -133,9 +132,9 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     });
 
     try {
-      final wordData = await getWordData(kWord);
-      clearAndDisplaySnackbar(context, 'details for $kWord fetched from llama model successfully', duration: 1);
-      _word = kWord ?? '';
+      final wordData = await getWordData(inputWord);
+      clearAndDisplaySnackbar(context, 'details for $inputWord fetched from llama model successfully', duration: 2);
+      _word = inputWord ?? '';
       _phonatic = wordData['phonetic'] ?? '';
       _root = wordData['root'] ?? '';
       _wordClass = _getWordClassFromString(wordData['wordType']);
@@ -148,6 +147,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
       _rootController.text = _root;
       _definitionController.text = _definition;
     } catch (e) {
+      clearAndDisplaySnackbar(context, 'failed to load details for $inputWord from llama model.', duration: 2);
     } finally {
       setState(() {
         _isLoading = false;
