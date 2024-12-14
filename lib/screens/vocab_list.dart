@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vocab_list/widgets/popup_menu_widget.dart';
 
 import '../models/word_meaning.dart';
 import '../utils/colors_and_theme.dart';
@@ -30,7 +31,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
     super.dispose();
   }
 
-  IconData menuIcon = Icons.menu;
+
   String _query = '';
 
   @override
@@ -38,6 +39,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
     void openAddExpenseOverlay() {
       showModalBottomSheet(
         context: context,
+        backgroundColor: Colors.transparent,
         builder: (ctx) {
           return AddWordWidget(
             word: '',
@@ -64,48 +66,18 @@ class _WordsListScreenState extends State<WordsListScreen> {
             Row(
               children: [
                 const Expanded(
-                  child: Text('My Vocab List',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 30,
-                      ),),
+                  child: Text(
+                    'My Vocab List',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 30,
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   width: 8,
                 ),
-                PopupMenuButton<String>(
-                    onOpened: () {
-                      // setState(() {
-                        menuIcon = Icons.menu_open;
-                      // });
-                    },
-                    onCanceled: () {
-                      // setState(() {
-                        menuIcon = Icons.menu;
-                      // });
-                    },
-                    icon: Icon(menuIcon),
-                    onSelected: (value) {
-                      if (value == 'logout') {
-                        firebaseAuthInstance.signOut();
-                      }
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return [
-                        PopupMenuItem<String>(
-                            value: 'logout', child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.logout),
-                                Text('Logout',
-                                style: TextStyle(
-                                  color: Theme.of(context).brightness == Brightness.dark ? kDarkWhiteShade1: null,
-                                ),),
-                              ],
-                            ))
-                      ];
-                    }),
+                PopMenuWidget(),
               ],
             ),
             const SizedBox(

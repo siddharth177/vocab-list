@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
 
 import '../../providers/auth_provider.dart';
+import '../../utils/colors_and_theme.dart';
 import '../../widgets/authentication/forgot_password.dart';
 import '../../widgets/authentication/login_signup.dart';
 
@@ -82,14 +83,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         Card(
                           elevation: 40,
                           color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white10.withOpacity(0.65)
+                              ? Colors.white10.withOpacity(0.40)
                               : Colors.white.withOpacity(0.65),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
                             side: BorderSide(
                               color: Theme.of(context).brightness ==
                                       Brightness.dark
-                                  ? Colors.white70
+                                  ? Colors.white10
                                   : Colors.transparent,
                             ),
                           ),

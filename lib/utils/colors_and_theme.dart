@@ -76,4 +76,12 @@ var kDarkThemeData = kLightThemeData.copyWith(
     enableFeedback: true,
     color: kDarkBlackShade2,
   ),
+  dropdownMenuTheme: const DropdownMenuThemeData().copyWith(
+    menuStyle: MenuStyle(
+      backgroundColor: MaterialStateProperty.all(kDarkBlackShade2),
+    ),
+    textStyle: TextStyle(
+      color: kDarkWhiteShade1
+    ),
+  ),
 );
