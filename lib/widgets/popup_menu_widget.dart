@@ -44,6 +44,7 @@ class _PopupMenuWidgetState extends State<PopMenuWidget> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Icon(Icons.logout),
+                  SizedBox(width: 8),
                   Text(
                     'Logout',
                     style: TextStyle(

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:vocab_list/widgets/popup_menu_widget.dart';
 
 import '../models/word_meaning.dart';
-import '../utils/colors_and_theme.dart';
-import '../utils/firebase.dart';
 import '../widgets/add_word_widget.dart';
 import '../widgets/loading.dart';
 import '../widgets/word_display_widget.dart';
