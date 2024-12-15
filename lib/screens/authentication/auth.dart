@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rive/rive.dart';
 
 import '../../providers/auth_provider.dart';
-import '../../utils/colors_and_theme.dart';
 import '../../widgets/authentication/forgot_password.dart';
 import '../../widgets/authentication/login_signup.dart';
 
