@@ -1,35 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vocab_list/widgets/theme_popup_menu_widget.dart';
 
-import '../providers/theme_provider.dart';
 import '../utils/colors_and_theme.dart';
 import '../utils/firebase.dart';
 
-class PopMenuWidget extends ConsumerStatefulWidget {
+class PopMenuWidget extends StatefulWidget {
   const PopMenuWidget({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() {
+  State<StatefulWidget> createState() {
     return _PopupMenuWidgetState();
   }
 }
 
-class _PopupMenuWidgetState extends ConsumerState<PopMenuWidget> {
+class _PopupMenuWidgetState extends State<PopMenuWidget> {
   IconData menuIcon = Icons.menu;
-  bool _showThemeMenu = false;
-
-  void _toggleThemeMenu() {
-    setState(() {
-      _showThemeMenu = !_showThemeMenu;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    final themeNotifier = ref.read(themeModeProvider.notifier);
-    final currentTheme = ref.watch(themeModeProvider);
-    final themeMode = ref.watch(themeModeProvider);
     return PopupMenuButton<String>(
         onOpened: () {
           setState(() {
@@ -41,7 +30,6 @@ class _PopupMenuWidgetState extends ConsumerState<PopMenuWidget> {
             menuIcon = Icons.menu;
           });
         },
-
         icon: Icon(menuIcon),
         onSelected: (value) {
           if (value == 'logout') {
@@ -68,24 +56,11 @@ class _PopupMenuWidgetState extends ConsumerState<PopMenuWidget> {
                 ],
               ),
             ),
-            // PopupMenuItem<String>(
-            //   value: 'theme',
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.start,
-            //     crossAxisAlignment: CrossAxisAlignment.center,
-            //     children: [
-            //       const Icon(Icons.brightness_5),
-            //       Text(
-            //         'Theme',
-            //         style: TextStyle(
-            //           color: Theme.of(context).brightness == Brightness.dark
-            //               ? kDarkWhiteShade1
-            //               : null,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+            const PopupMenuItem(
+              value: 'theme',
+              child: ThemeSubMenu(
+              ),
+            ),
           ];
         });
   }
