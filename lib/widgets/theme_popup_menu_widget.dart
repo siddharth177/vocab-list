@@ -20,6 +20,7 @@ class _ThemeSubMenuWidgetState extends ConsumerState<ThemeSubMenu> {
     final themeMode = ref.watch(themeModeProvider);
     void onThemeSelected(ThemeMode themeMode) {
       _themeModeProvider.updateTheme(themeMode);
+      Navigator.pop(context);
     }
 
     return PopupMenuButton<ThemeMode>(
