@@ -83,6 +83,11 @@ class _EmailVerificationScreenState
     return Scaffold(
       body: Stack(
         children: [
+          Container(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color.fromARGB(200, 123, 123, 123)
+                : Colors.transparent,
+          ),
           const RiveAnimation.asset('assets/animations/rive/spin.riv'),
           Positioned.fill(
               child: BackdropFilter(

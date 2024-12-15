@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vocab_list/widgets/theme_popup_menu_widget.dart';
 
 import '../utils/colors_and_theme.dart';
@@ -45,6 +44,7 @@ class _PopupMenuWidgetState extends State<PopMenuWidget> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Icon(Icons.logout),
+                  SizedBox(width: 8),
                   Text(
                     'Logout',
                     style: TextStyle(
