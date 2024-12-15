@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
 import 'package:vocab_list/services/groq_llama.dart';
+import 'package:vocab_list/utils/colors_and_theme.dart';
 import 'package:vocab_list/utils/snackbar_messaging.dart';
 import 'package:vocab_list/widgets/postioned_loading_widget.dart';
 
@@ -123,8 +123,8 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     });
   }
 
-  Future<void> _fetchWordData(kWord) async {
-    if (kWord.isEmpty) {
+  Future<void> _fetchWordData(inputWord) async {
+    if (inputWord.isEmpty) {
       return;
     }
 
@@ -133,21 +133,26 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     });
 
     try {
-      final wordData = await getWordData(kWord);
-      clearAndDisplaySnackbar(context, 'data fetched from llama model successfully', duration: 1);
-      _word = kWord ?? '';
+      final wordData = await getWordData(inputWord);
+      clearAndDisplaySnackbar(context,
+          'details for $inputWord fetched from llama model successfully',
+          duration: 2);
+      _word = inputWord ?? '';
       _phonatic = wordData['phonetic'] ?? '';
       _root = wordData['root'] ?? '';
       _wordClass = _getWordClassFromString(wordData['wordType']);
       _definition = wordData['definition'] ?? '';
-      _usages.addAll(_getStringListFromApiData(wordData['usages']));
-      _examples.addAll(_getStringListFromApiData(wordData['examples']));
+      _usages = (_getStringListFromApiData(wordData['usages']));
+      _examples = (_getStringListFromApiData(wordData['examples']));
 
       _wordController.text = _word;
       _phonaticController.text = _phonatic;
       _rootController.text = _root;
       _definitionController.text = _definition;
     } catch (e) {
+      clearAndDisplaySnackbar(
+          context, 'failed to load details for $inputWord from llama model.',
+          duration: 2);
     } finally {
       setState(() {
         _isLoading = false;
@@ -177,6 +182,22 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle labelStyle = const TextStyle().copyWith(
+      color: Theme.of(context).brightness == Brightness.dark
+          ? kDarkWhiteShade2
+          : null,
+    );
+
+    TextStyle floatingLabelStyle = const TextStyle().copyWith(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Theme.of(context).colorScheme.primary
+            : null);
+
+    TextStyle inputTextStyle = const TextStyle().copyWith(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? kDarkWhiteShade1
+            : null);
+
     return Container(
       padding: EdgeInsets.only(
           top: MediaQueryData.fromView(WidgetsBinding.instance.window)
@@ -200,9 +221,14 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        style: inputTextStyle,
                         controller: _wordController,
-                        decoration: const InputDecoration(
-                          label: Text("Word"),
+                        decoration: InputDecoration(
+                          labelStyle: labelStyle,
+                          floatingLabelStyle: floatingLabelStyle,
+                          label: const Text(
+                            "Word",
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().length <= 1) {
@@ -227,8 +253,11 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                         children: [
                           TextFormField(
                             controller: _rootController,
-                            decoration: const InputDecoration(
-                              label: Text("Root"),
+                            style: inputTextStyle,
+                            decoration: InputDecoration(
+                              labelStyle: labelStyle,
+                              floatingLabelStyle: floatingLabelStyle,
+                              label: const Text("Root"),
                             ),
                             onSaved: (value) {
                               _root = value!;
@@ -257,11 +286,19 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                                 ? _wordClass
                                 : WordClass.none,
                             requestFocusOnTap: true,
-                            label: const Text('Word Class'),
+                            label: Text(
+                              'Word Class',
+                              style: floatingLabelStyle,
+                            ),
                             dropdownMenuEntries: WordClass.values
                                 .map<DropdownMenuEntry<WordClass>>((e) =>
                                     DropdownMenuEntry<WordClass>(
-                                        value: e, label: e.name))
+                                        value: e,
+                                        label: e.name,
+                                        style: ButtonStyle(
+                                            textStyle: MaterialStateProperty
+                                                .all(TextStyle(
+                                                    color: kDarkWhiteShade1)))))
                                 .toList(),
                             onSelected: (value) {
                               _wordClass = value!;
@@ -280,8 +317,13 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                         children: [
                           TextFormField(
                             controller: _phonaticController,
-                            decoration: const InputDecoration(
-                              label: Text('Phonatic'),
+                            style: inputTextStyle,
+                            decoration: InputDecoration(
+                              labelStyle: labelStyle,
+                              floatingLabelStyle: floatingLabelStyle,
+                              label: const Text(
+                                'Phonatic',
+                              ),
                             ),
                             onSaved: (value) {
                               if (value == null || value.trim().length <= 1) {
@@ -307,8 +349,13 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       children: [
                         TextFormField(
                           controller: _definitionController,
-                          decoration: const InputDecoration(
-                            label: Text('Definition'),
+                          style: inputTextStyle,
+                          decoration: InputDecoration(
+                            labelStyle: labelStyle,
+                            floatingLabelStyle: floatingLabelStyle,
+                            label: Text(
+                              'Definition',
+                            ),
                           ),
                           onFieldSubmitted: (value) {
                             _definition = value;
@@ -340,8 +387,13 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       children: [
                         TextFormField(
                           controller: _usageController,
-                          decoration: const InputDecoration(
-                            label: Text('Usages'),
+                          style: inputTextStyle,
+                          decoration: InputDecoration(
+                            labelStyle: labelStyle,
+                            floatingLabelStyle: floatingLabelStyle,
+                            label: Text(
+                              'Usages',
+                            ),
                           ),
                           onFieldSubmitted: (value) {
                             if (_usages.isEmpty && widget.usages.isNotEmpty) {
@@ -371,14 +423,24 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Expanded(child: Text(meaning)),
+                              Expanded(
+                                  child: Text(
+                                meaning,
+                                style: inputTextStyle,
+                              )),
                               IconButton(
                                   onPressed: () {
                                     setState(() {
                                       _usages.remove(meaning);
                                     });
                                   },
-                                  icon: Icon(Icons.delete)),
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? kDarkWhiteShade2
+                                        : null,
+                                  )),
                             ],
                           ),
                         );
@@ -395,9 +457,13 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       children: [
                         TextFormField(
                           controller: _exampleController,
-                          decoration: const InputDecoration(
-                            label: Text('Examples'),
-                          ),
+                          style: inputTextStyle,
+                          decoration: InputDecoration(
+                              labelStyle: labelStyle,
+                              floatingLabelStyle: floatingLabelStyle,
+                              label: const Text(
+                                'Examples',
+                              )),
                           onFieldSubmitted: (value) {
                             if (_examples.isEmpty &&
                                 widget.examples.isNotEmpty) {
@@ -427,14 +493,24 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Expanded(child: Text(meaning)),
+                              Expanded(
+                                  child: Text(
+                                meaning,
+                                style: inputTextStyle,
+                              )),
                               IconButton(
                                   onPressed: () {
                                     setState(() {
                                       _examples.remove(meaning);
                                     });
                                   },
-                                  icon: const Icon(Icons.delete)),
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? kDarkWhiteShade2
+                                        : null,
+                                  )),
                             ],
                           ),
                         );
@@ -453,15 +529,31 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                     if (widget.isEdit)
                       ElevatedButton(
                         onPressed: _onFormSubmit,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.primaryContainer),
+                          minimumSize:
+                              MaterialStateProperty.all<Size>(Size(20, 30)),
+                        ),
                         child: Text(_saveButton),
                       )
                     else ...[
                       ElevatedButton(
                         onPressed: _clearEntries,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              kDarkQuaternaryColor),
+                          // minimumSize: MaterialStateProperty.all<Size>(Size(50,40)),
+                        ),
                         child: Text(_clearButton),
                       ),
                       ElevatedButton(
                         onPressed: _onFormSubmit,
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer)),
                         child: Text(_saveButton),
                       ),
                     ]

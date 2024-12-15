@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vocab_list/widgets/popup_menu_widget.dart';
 
 import '../models/word_meaning.dart';
+import '../utils/colors_and_theme.dart';
 import '../utils/firebase.dart';
 import '../widgets/add_word_widget.dart';
 import '../widgets/loading.dart';
@@ -21,13 +23,14 @@ class _WordsListScreenState extends State<WordsListScreen> {
   List<WordMeaning> _vocabList = [];
   List<WordMeaning> _filteredVocabList = [];
 
-  final TextEditingController _controller = TextEditingController();
+  TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
+
 
   String _query = '';
 
@@ -36,6 +39,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
     void openAddExpenseOverlay() {
       showModalBottomSheet(
         context: context,
+        backgroundColor: Colors.transparent,
         builder: (ctx) {
           return AddWordWidget(
             word: '',
@@ -53,40 +57,51 @@ class _WordsListScreenState extends State<WordsListScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xfffafbfd),
       appBar: AppBar(
-        toolbarHeight: 80,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        toolbarHeight: 150,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: SearchBar(
-                shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                onChanged: (query) {
-                  setState(() {
-                    _query = query;
-                  });
-                },
-                trailing: [
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _query = '';
-                        });
-                      },
-                      icon: const Icon(Icons.clear)),
-                ],
-              ),
+            Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    'My Vocab List',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                PopMenuWidget(),
+              ],
             ),
             const SizedBox(
-              width: 8,
+              height: 10,
             ),
-            IconButton(
-                onPressed: () {
-                  firebaseAuthInstance.signOut();
-                },
-                icon: const Icon(Icons.logout))
+            SearchBar(
+              hintText: 'search your word',
+              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10))),
+              onChanged: (query) {
+                setState(() {
+                  _query = query;
+                });
+              },
+              trailing: [
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _query = '';
+                      });
+                    },
+                    icon: const Icon(Icons.clear)),
+              ],
+            ),
           ],
         ),
       ),
@@ -123,7 +138,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
               .toList();
 
           return ListView.builder(
-            padding: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 20),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: _filteredVocabList.length,
@@ -137,8 +152,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(4.0),
         child: FloatingActionButton(
-          backgroundColor: Theme.of(context).secondaryHeaderColor,
-          elevation: 2,
+          elevation: 10,
           onPressed: openAddExpenseOverlay,
           tooltip: "Add A Word",
           child: const Icon(Icons.add),
