@@ -85,4 +85,7 @@ var kDarkThemeData = kLightThemeData.copyWith(
       color: kDarkWhiteShade1
     ),
   ),
+  snackBarTheme: const SnackBarThemeData().copyWith(
+    backgroundColor: kDarkPrimaryColor,
+  ),
 );
