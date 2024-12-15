@@ -291,14 +291,20 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                               style: floatingLabelStyle,
                             ),
                             dropdownMenuEntries: WordClass.values
-                                .map<DropdownMenuEntry<WordClass>>((e) =>
-                                    DropdownMenuEntry<WordClass>(
-                                        value: e,
-                                        label: e.name,
-                                        style: ButtonStyle(
-                                            textStyle: MaterialStateProperty
-                                                .all(TextStyle(
-                                                    color: kDarkWhiteShade1)))))
+                                .map<DropdownMenuEntry<WordClass>>(
+                                  (e) => DropdownMenuEntry<WordClass>(
+                                    value: e,
+                                    label: e.name,
+                                    style: ButtonStyle(
+                                      foregroundColor:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? MaterialStateProperty.all(
+                                                  kDarkWhiteShade2)
+                                              : null,
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                             onSelected: (value) {
                               _wordClass = value!;
