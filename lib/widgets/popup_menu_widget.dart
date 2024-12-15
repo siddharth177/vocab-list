@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vocab_list/widgets/theme_popup_menu_widget.dart';
 
 import '../utils/colors_and_theme.dart';

@@ -74,6 +74,7 @@ flutter:
   assets:
     - assets/animations/rive/spin.riv
     - assets/animations/rive/geometric_loading_animation.riv
+    - assets/animations/rive/geometric_loading_animation_dark.riv
     - assets/animations/rive/sphere_animation.riv
     - assets/animations/rive/dot_loading.riv
     - assets/images/appBarImage.png

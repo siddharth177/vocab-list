@@ -13,9 +13,10 @@ class LoadingWidget extends StatefulWidget {
 class _LoadingWidgetState extends State<LoadingWidget> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: RiveAnimation.asset(
-          'assets/animations/rive/geometric_loading_animation.riv'),
+    return Center(
+      child: Theme.of(context).brightness == Brightness.light ? const RiveAnimation.asset(
+          'assets/animations/rive/geometric_loading_animation.riv') : const RiveAnimation.asset(
+          'assets/animations/rive/geometric_loading_animation_dark.riv'),
     );
   }
 }
