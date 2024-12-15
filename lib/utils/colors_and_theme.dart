@@ -69,8 +69,9 @@ var kDarkThemeData = kLightThemeData.copyWith(
   ),
   textTheme: kPrimaryFontTheme,
   floatingActionButtonTheme: const FloatingActionButtonThemeData().copyWith(
-      backgroundColor: kDarkBlackShade2,
-      foregroundColor: kDarkWhiteShade1
+      backgroundColor: kDarkBlackShade1,
+      foregroundColor: kDarkWhiteShade1,
+    elevation: 20
   ),
   popupMenuTheme: const PopupMenuThemeData().copyWith(
     enableFeedback: true,
