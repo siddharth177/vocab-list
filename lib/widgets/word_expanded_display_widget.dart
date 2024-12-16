@@ -125,7 +125,7 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                           (meaning) => Text(
                             meaning,
                             style: GoogleFonts.poppins(
-                              // fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w300,
                               fontSize: 18,
                               color: Theme.of(context).brightness ==
                                       Brightness.dark
@@ -155,6 +155,7 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                               meaning,
                               style: GoogleFonts.poppins(
                                 fontSize: 18,
+                                fontWeight: FontWeight.w300,
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
                                     ? kDarkWhiteShade2
