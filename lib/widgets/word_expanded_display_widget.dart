@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vocab_list/models/word_meaning.dart';
 import 'package:vocab_list/utils/colors_and_theme.dart';
@@ -20,8 +21,7 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
-        color: Theme.of(context).brightness ==
-            Brightness.dark
+        color: Theme.of(context).brightness == Brightness.dark
             ? kDarkBlackShade2
             : null,
         shape: RoundedRectangleBorder(
@@ -39,62 +39,84 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                      widget.wordMeaning.word[0].toUpperCase() +
-                          widget.wordMeaning.word.substring(1).toLowerCase(),
-                      style: GoogleFonts.lato(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w700,
-                        color: Theme.of(context).brightness ==
-                            Brightness.dark
-                            ? kDarkWhiteShade1
-                            : null,)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.wordMeaning.word[0].toUpperCase() +
+                              widget.wordMeaning.word.substring(1).toLowerCase(),
+                          style: GoogleFonts.lato(
+                            fontSize: 40,
+                            fontWeight: FontWeight.w700,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? kDarkWhiteShade1
+                                : null,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          FlutterTts().speak(widget.wordMeaning.word);
+                        },
+                        icon: Icon(
+                          Icons.record_voice_over,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? kDarkWhiteShade1
+                              : null,
+                        ),
+                      ),
+                    ],
+                  ),
                   if (widget.wordMeaning.definition.isNotEmpty)
                     Text(widget.wordMeaning.definition,
                         style: GoogleFonts.poppins(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w300,
-                            fontStyle: FontStyle.italic,
-                          color: Theme.of(context).brightness ==
-                              Brightness.dark
+                          fontSize: 20,
+                          fontWeight: FontWeight.w300,
+                          fontStyle: FontStyle.italic,
+                          color: Theme.of(context).brightness == Brightness.dark
                               ? kDarkWhiteShade2
-                              : null,)),
+                              : null,
+                        )),
                   const SizedBox(
                     height: 20,
                   ),
                   if (widget.wordMeaning.root.isNotEmpty)
                     Text(widget.wordMeaning.root,
                         style: GoogleFonts.poppins(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w200,
-                            fontStyle: FontStyle.normal,
-                          color: Theme.of(context).brightness ==
-                              Brightness.dark
+                          fontSize: 18,
+                          fontWeight: FontWeight.w200,
+                          fontStyle: FontStyle.normal,
+                          color: Theme.of(context).brightness == Brightness.dark
                               ? kDarkWhiteShade2
-                              : null,)),
+                              : null,
+                        )),
                   const SizedBox(
                     height: 10,
                   ),
                   if (widget.wordMeaning.phonatic.isNotEmpty)
                     Text(widget.wordMeaning.phonatic,
                         style: GoogleFonts.poppins(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w200,
-                            fontStyle: FontStyle.normal,
-                          color: Theme.of(context).brightness ==
-                              Brightness.dark
+                          fontSize: 18,
+                          fontWeight: FontWeight.w200,
+                          fontStyle: FontStyle.normal,
+                          color: Theme.of(context).brightness == Brightness.dark
                               ? kDarkWhiteShade2
-                              : null,)),
+                              : null,
+                        )),
                   const SizedBox(
                     height: 20,
                   ),
                   if (widget.wordMeaning.usages.isNotEmpty)
                     Text('Usages',
-                        style: GoogleFonts.roboto(
-                            fontSize: 20, color: Theme.of(context).brightness ==
-                            Brightness.dark
-                            ? kDarkWhiteShade1
-                            : null,)),
+                        style: GoogleFonts.poppins(
+                          // fontWeight: FontWeight.w400,
+                          fontSize: 26,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? kDarkWhiteShade1
+                              : null,
+                        )),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +124,9 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                         .map(
                           (meaning) => Text(
                             meaning,
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 18,
                               color: Theme.of(context).brightness ==
                                       Brightness.dark
                                   ? kDarkWhiteShade2
@@ -118,20 +142,25 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                   if (widget.wordMeaning.examples.isNotEmpty)
                     Text('Examples',
                         style: GoogleFonts.roboto(
-                            fontSize: 20, color: Theme.of(context).brightness ==
-                            Brightness.dark
-                            ? kDarkWhiteShade1
-                            : null,)),
+                          fontSize: 26,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? kDarkWhiteShade1
+                              : null,
+                        )),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: widget.wordMeaning.examples
                         .map((meaning) => Text(
                               meaning,
-                              style: TextStyle(color: Theme.of(context).brightness ==
-                                  Brightness.dark
-                                  ? kDarkWhiteShade2
-                                  : null,),
+                              style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w300,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? kDarkWhiteShade2
+                                    : null,
+                              ),
                             ))
                         .toList(),
                   ),
