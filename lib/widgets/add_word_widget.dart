@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vocab_list/services/groq_llama.dart';
+import 'package:vocab_list/services/word_details.dart';
+import 'package:vocab_list/services/speack_aloud.dart';
 import 'package:vocab_list/utils/colors_and_theme.dart';
 import 'package:vocab_list/utils/snackbar_messaging.dart';
 import 'package:vocab_list/widgets/postioned_loading_widget.dart';
@@ -64,13 +65,14 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
     _definitionController.text = _definition;
     _wordController.text = _word;
-    _phonaticController.text = _phonatic;
+    // _phonaticController.text = _phonatic;
     _rootController.text = _root;
   }
 
   final TextEditingController _wordController = TextEditingController();
   final TextEditingController _rootController = TextEditingController();
-  final TextEditingController _phonaticController = TextEditingController();
+
+  // final TextEditingController _phonaticController = TextEditingController();
   final TextEditingController _definitionController = TextEditingController();
   final TextEditingController _usageController = TextEditingController();
   final TextEditingController _exampleController = TextEditingController();
@@ -106,7 +108,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
   void _clearEntries() {
     _wordController.clear();
-    _phonaticController.clear();
+    // _phonaticController.clear();
     _rootController.clear();
     _definitionController.clear();
     _exampleController.clear();
@@ -135,10 +137,10 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     try {
       final wordData = await getWordData(inputWord);
       clearAndDisplaySnackbar(context,
-          'details for $inputWord fetched from llama model successfully',
+          'Details for $inputWord fetched from llama model successfully',
           duration: 2);
       _word = inputWord ?? '';
-      _phonatic = wordData['phonetic'] ?? '';
+      // _phonatic = wordData['phonetic'] ?? '';
       _root = wordData['root'] ?? '';
       _wordClass = _getWordClassFromString(wordData['wordType']);
       _definition = wordData['definition'] ?? '';
@@ -146,7 +148,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
       _examples = (_getStringListFromApiData(wordData['examples']));
 
       _wordController.text = _word;
-      _phonaticController.text = _phonatic;
+      // _phonaticController.text = _phonatic;
       _rootController.text = _root;
       _definitionController.text = _definition;
     } catch (e) {
@@ -220,6 +222,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
+                      flex: 4,
                       child: TextFormField(
                         style: inputTextStyle,
                         controller: _wordController,
@@ -245,29 +248,31 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                         },
                       ),
                     ),
-                    const SizedBox(
-                      width: 20,
+                    // const SizedBox(
+                    //   width: 20,
+                    // ),
+                    Expanded(
+                      child: IconButton(
+                        onPressed: () {
+                          _fetchWordData(_wordController.text);
+                        },
+                        icon: Icon(
+                          Icons.search_rounded,
+                          color: Theme.of(context).colorScheme.primary
+                        ),
+                      ),
                     ),
                     Expanded(
-                      child: Stack(
-                        children: [
-                          TextFormField(
-                            controller: _rootController,
-                            style: inputTextStyle,
-                            decoration: InputDecoration(
-                              labelStyle: labelStyle,
-                              floatingLabelStyle: floatingLabelStyle,
-                              label: const Text("Root"),
-                            ),
-                            onSaved: (value) {
-                              _root = value!;
-                            },
-                          ),
-                          if (_isLoading) // Only show the loading indicator when isLoading is true
-                            const PostionedLoadingWidget(),
-                        ],
+                      child: IconButton(
+                        onPressed: () {
+                          speakAloud(_wordController.text);
+                        },
+                        icon: Icon(
+                          Icons.record_voice_over,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -322,21 +327,15 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       child: Stack(
                         children: [
                           TextFormField(
-                            controller: _phonaticController,
+                            controller: _rootController,
                             style: inputTextStyle,
                             decoration: InputDecoration(
                               labelStyle: labelStyle,
                               floatingLabelStyle: floatingLabelStyle,
-                              label: const Text(
-                                'Phonatic',
-                              ),
+                              label: const Text("Root"),
                             ),
                             onSaved: (value) {
-                              if (value == null || value.trim().length <= 1) {
-                                return;
-                              } else {
-                                _phonatic = value;
-                              }
+                              _root = value!;
                             },
                           ),
                           if (_isLoading) // Only show the loading indicator when isLoading is true
@@ -435,18 +434,19 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                                 style: inputTextStyle,
                               )),
                               IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _usages.remove(meaning);
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? kDarkWhiteShade2
-                                        : null,
-                                  )),
+                                onPressed: () {
+                                  setState(() {
+                                    _usages.remove(meaning);
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? kDarkWhiteShade2
+                                      : null,
+                                ),
+                              ),
                             ],
                           ),
                         );
