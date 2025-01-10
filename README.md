@@ -11,6 +11,7 @@
    4. [Use Dark Mode](#load-on-eyes-no-worries---use-dark-theme)
 3. [Tech Stack Used](#technology-stack)
 4. [Use this package](#how-to-use-the-package)
+5. [Want to contribute?](#contributing)
 
 
 ### Functionalities
@@ -69,5 +70,10 @@ flutter pub get
 flutter run
 ```
 
+### Contributing
+Contributions are welcome! To contribute:
+1.	Fork the repository.
+2.	Create a new branch for your feature/bug fix.
+3.	Commit your changes and create a pull request.
 
 
