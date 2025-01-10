@@ -71,7 +71,7 @@ flutter run
 ```
 
 ### Contributing
-Contributions are welcome! To contribute:
+Contributions are welcomed! To contribute:
 1.	Fork the repository.
 2.	Create a new branch for your feature/bug fix.
 3.	Commit your changes and create a pull request.
