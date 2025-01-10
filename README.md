@@ -1,14 +1,32 @@
-# Vocab List
-## A place to maintain your vocabulary list.
-
+# Vocab List ![image](https://github.com/siddharth177/vocab-list/blob/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+### A comprehensive, all-in-one solution for managing your vocabulary while preparing for exams like GRE, TOEFL, or any language-learning journey. With this app, you can search, save, and review words, all in one place.
+#
 ### Functionalities
-1. Add and maitain your vocab list at one place.
-2. Search your word to get details like definition, usages and examples. Uses llama model to fetch data.
+1. Manage Your Vocabulary
+	•	Add words to your personalized vocabulary list.
+	•	Edit or delete words effortlessly.
+	•	Expand entries to view detailed information about each word.
+	•	Use the Speak Aloud feature to hear word pronunciations for better retention.
+
+2. Search and Explore
+	•	Look up word definitions, usages, and examples with ease.
+	•	Powered by the Llama model, ensuring accurate and contextually rich information retrieval.
 
 
 ## Screenshots
-![image](https://github.com/user-attachments/assets/da3cf5a5-ba43-4d59-b372-ee0e51fc562b)
-![image](https://github.com/user-attachments/assets/40797aca-e958-4323-af31-f3b2a6cbbddf)
-![image](https://github.com/user-attachments/assets/4522031e-cfae-4b81-a771-e921dc9056ff)
-![image](https://github.com/user-attachments/assets/51057b70-cf2e-433c-ae69-7cd63eea917e)
+**Effortlessly maintain your vocabulary list**
+![image](https://github.com/user-attachments/assets/3d2ef2b5-2c73-4d50-a6c3-036936417c22) ![image](https://github.com/user-attachments/assets/062a7004-11aa-4bf3-856b-0ecd945f5def) ![image](https://github.com/user-attachments/assets/a2689dee-3757-4acf-8257-862cb9d40ec5)
+
+**Get right prononciations with speak aloud**
+![image](https://github.com/user-attachments/assets/bd16a1ed-2561-4c26-a366-ef040660a315)
+
+**Get in-depth details for every word you search:**
+![image](https://github.com/user-attachments/assets/5a235081-e68b-4dd4-96e4-fddc7a68f303)
+
+**Load on eyes, no worries - use dark theme**
+![image](https://github.com/user-attachments/assets/eb437a37-1101-4d71-a2a8-a832f45a8ca7) ![image](https://github.com/user-attachments/assets/bd13d805-6908-4107-b0d9-dbbb06fc34ef)
+
+
+
+
 
