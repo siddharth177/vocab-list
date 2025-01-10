@@ -4,13 +4,15 @@
 
 ## Table of Contents
 1. [Functionalities](#functionalities)
-2. [How to Use App (Screenshots)](#screenshots)
+2. [How to Use App (Screenshots)](#how-to-use-the-app)
    1. [Effortlessly maintain your vocabulary list](#effortlessly-maintain-your-vocabulary-list)
    2. [Get right prononciation with speak aloud](#get-right-prononciations-with-speak-aloud)
    3. [Get in-depth details for every word you search](#get-in-depth-details-for-every-word-you-search)
    4. [Use Dark Mode](#load-on-eyes-no-worries---use-dark-theme)
-3. [Tech Stack Used] (#technology-stack)
-4. [Use this package] (#how-to-use)
+3. [Tech Stack Used](#technology-stack)
+4. [Use this package](#how-to-use-the-package)
+
+
 ### Functionalities
 1. Manage Your Vocabulary
  - Add words to your personalized vocabulary list.
@@ -23,7 +25,7 @@
  - Powered by the Llama model, ensuring accurate and contextually rich information retrieval.
 
 
-## How to Use App
+## How to use the App
 ### **Effortlessly maintain your vocabulary list**
 ![image](https://github.com/user-attachments/assets/3d2ef2b5-2c73-4d50-a6c3-036936417c22) ![image](https://github.com/user-attachments/assets/062a7004-11aa-4bf3-856b-0ecd945f5def) ![image](https://github.com/user-attachments/assets/a2689dee-3757-4acf-8257-862cb9d40ec5)
 #
@@ -47,7 +49,7 @@
 - Machine Learning: Llama Model
 
 
-### How to Use Package
+### How to use the package
 1. Clone the repository
 ```
 git clone https://github.com/your-username/vocab-list.git  
