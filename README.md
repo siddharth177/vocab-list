@@ -1,6 +1,6 @@
 # Vocab List <img src="https://github.com/siddharth177/vocab-list/blob/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="logo" height="30"/>
 ### A comprehensive, all-in-one solution for managing your vocabulary while preparing for exams like GRE, TOEFL, or any language-learning journey. With this app, you can search, save, and review words, all in one place.
-#
+
 
 ## Table of Contents
 1. [Functionalities](#functionalities)
@@ -14,14 +14,14 @@
 5. [Want to contribute?](#contributing)
 
 
-### Functionalities
+## Functionalities
 1. Manage Your Vocabulary
  - Add words to your personalized vocabulary list.
  - Edit or delete words effortlessly.
  - Expand entries to view detailed information about each word.
  - Use the Speak Aloud feature to hear word pronunciations for better retention.
 
-3. Search and Explore
+2. Search and Explore
  - Look up word definitions, usages, and examples with ease.
  - Powered by the Llama model, ensuring accurate and contextually rich information retrieval.
 
@@ -44,13 +44,13 @@
 #
 
 
-### Technology Stack
+## Technology Stack
 - Frontend: Flutter
 - Backend: Firebase
 - Machine Learning: Llama Model
 
 
-### How to use the package
+## How to use the package
 1. Clone the repository
 ```
 git clone https://github.com/your-username/vocab-list.git  
@@ -69,8 +69,9 @@ flutter pub get
 ```
 flutter run
 ```
+#
 
-### Contributing
+## Contributing
 Contributions are welcomed! To contribute:
 1.	Fork the repository.
 2.	Create a new branch for your feature/bug fix.
