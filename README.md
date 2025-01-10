@@ -1,4 +1,4 @@
-# Vocab List ![image](https://github.com/siddharth177/vocab-list/blob/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+# Vocab List <img src="https://github.com/siddharth177/vocab-list/blob/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="logo" height="30"/>
 ### A comprehensive, all-in-one solution for managing your vocabulary while preparing for exams like GRE, TOEFL, or any language-learning journey. With this app, you can search, save, and review words, all in one place.
 #
 
