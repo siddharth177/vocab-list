@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vocab_list/models/word_meaning.dart';
 import 'package:vocab_list/utils/colors_and_theme.dart';
+
+import '../services/speack_aloud.dart';
 
 class DisplayVocabListElement extends StatefulWidget {
   const DisplayVocabListElement({required this.wordMeaning, super.key});
@@ -46,19 +47,22 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                       Expanded(
                         child: Text(
                           widget.wordMeaning.word[0].toUpperCase() +
-                              widget.wordMeaning.word.substring(1).toLowerCase(),
+                              widget.wordMeaning.word
+                                  .substring(1)
+                                  .toLowerCase(),
                           style: GoogleFonts.lato(
                             fontSize: 40,
                             fontWeight: FontWeight.w700,
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? kDarkWhiteShade1
-                                : null,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? kDarkWhiteShade1
+                                    : null,
                           ),
                         ),
                       ),
                       IconButton(
                         onPressed: () {
-                          FlutterTts().speak(widget.wordMeaning.word);
+                          speakAloud(widget.wordMeaning.word);
                         },
                         icon: Icon(
                           Icons.record_voice_over,
@@ -93,19 +97,6 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                               : null,
                         )),
                   const SizedBox(
-                    height: 10,
-                  ),
-                  if (widget.wordMeaning.phonatic.isNotEmpty)
-                    Text(widget.wordMeaning.phonatic,
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w200,
-                          fontStyle: FontStyle.normal,
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? kDarkWhiteShade2
-                              : null,
-                        )),
-                  const SizedBox(
                     height: 20,
                   ),
                   if (widget.wordMeaning.usages.isNotEmpty)
@@ -126,6 +117,7 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                             meaning,
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic,
                               fontSize: 18,
                               color: Theme.of(context).brightness ==
                                       Brightness.dark
@@ -141,7 +133,7 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                   ),
                   if (widget.wordMeaning.examples.isNotEmpty)
                     Text('Examples',
-                        style: GoogleFonts.roboto(
+                        style: GoogleFonts.poppins(
                           fontSize: 26,
                           color: Theme.of(context).brightness == Brightness.dark
                               ? kDarkWhiteShade1
@@ -156,6 +148,7 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                               style: GoogleFonts.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w300,
+                                fontStyle: FontStyle.italic,
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
                                     ? kDarkWhiteShade2
