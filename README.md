@@ -1,6 +1,16 @@
 # Vocab List ![image](https://github.com/siddharth177/vocab-list/blob/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
 ### A comprehensive, all-in-one solution for managing your vocabulary while preparing for exams like GRE, TOEFL, or any language-learning journey. With this app, you can search, save, and review words, all in one place.
 #
+
+## Table of Contents
+1. [Functionalities](#functionalities)
+2. [How to Use App (Screenshots)](#screenshots)
+   1. [Effortlessly maintain your vocabulary list](#effortlessly-maintain-your-vocabulary-list)
+   2. [Get right prononciation with speak aloud](#get-right-prononciations-with-speak-aloud)
+   3. [Get in-depth details for every word you search](#get-in-depth-details-for-every-word-you-search)
+   4. [Use Dark Mode](#load-on-eyes-no-worries---use-dark-theme)
+3. [Tech Stack Used] (#technology-stack)
+4. [Use this package] (#how-to-use)
 ### Functionalities
 1. Manage Your Vocabulary
  - Add words to your personalized vocabulary list.
@@ -13,7 +23,7 @@
  - Powered by the Llama model, ensuring accurate and contextually rich information retrieval.
 
 
-## Screenshots
+## How to Use App
 ### **Effortlessly maintain your vocabulary list**
 ![image](https://github.com/user-attachments/assets/3d2ef2b5-2c73-4d50-a6c3-036936417c22) ![image](https://github.com/user-attachments/assets/062a7004-11aa-4bf3-856b-0ecd945f5def) ![image](https://github.com/user-attachments/assets/a2689dee-3757-4acf-8257-862cb9d40ec5)
 #
@@ -37,7 +47,7 @@
 - Machine Learning: Llama Model
 
 
-### How to Use
+### How to Use Package
 1. Clone the repository
 ```
 git clone https://github.com/your-username/vocab-list.git  
