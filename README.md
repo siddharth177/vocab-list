@@ -1,12 +1,13 @@
 # Vocab List <img src="https://github.com/siddharth177/vocab-list/blob/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="logo" height="30"/>
 ### A comprehensive, all-in-one solution for managing your vocabulary while preparing for exams like GRE, TOEFL, or any language-learning journey. With this app, you can search, save, and review words, all in one place.
+### Try Out App on Web from : https://siddharth177.github.io/myVocabList/
 
 
 ## Table of Contents
 1. [Functionalities](#functionalities)
 2. [How to Use App (Screenshots)](#how-to-use-the-app)
    1. [Effortlessly maintain your vocabulary list](#effortlessly-maintain-your-vocabulary-list)
-   2. [Get right prononciation with speak aloud](#get-right-prononciations-with-speak-aloud)
+   2. [Get right pronunciation with speak aloud](#get-right-prononciations-with-speak-aloud)
    3. [Get in-depth details for every word you search](#get-in-depth-details-for-every-word-you-search)
    4. [Use Dark Mode](#load-on-eyes-no-worries---use-dark-theme)
 3. [Tech Stack Used](#technology-stack)
