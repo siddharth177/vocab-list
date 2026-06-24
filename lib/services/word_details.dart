@@ -5,7 +5,7 @@ import 'package:vocab_list/utils/secrets.dart';
 Future<Map<String, dynamic>> getWordData(String word) async {
   final url = Uri.parse('https://api.groq.com/openai/v1/chat/completions');
   final headers = {
-    'Authorization': kGroqApiKey,
+     'Authorization': groqApiKey,
     'Content-Type': 'application/json',
   };
   final body = json.encode({

@@ -41,7 +41,7 @@ var kLightThemeData = ThemeData().copyWith(
   ),
   cardTheme: const CardTheme().copyWith(
     elevation: 2
-  ),
+  ).data,
   snackBarTheme: const SnackBarThemeData().copyWith(
     backgroundColor: kDarkSecondaryColor,
   ),
@@ -66,7 +66,7 @@ var kDarkThemeData = kLightThemeData.copyWith(
   ),
   cardTheme: const CardTheme().copyWith(
     color: kDarkGreyShade2,
-  ),
+  ).data,
   textTheme: kPrimaryFontTheme,
   floatingActionButtonTheme: const FloatingActionButtonThemeData().copyWith(
       backgroundColor: kDarkBlackShade1,

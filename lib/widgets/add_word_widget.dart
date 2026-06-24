@@ -302,7 +302,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                                       foregroundColor:
                                           Theme.of(context).brightness ==
                                                   Brightness.dark
-                                              ? widgetStateProperty.all(
+                                              ? WidgetStateProperty.all(
                                                   kDarkWhiteShade2)
                                               : null,
                                     ),
@@ -367,10 +367,10 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                             // }
                             // _definition.add(_meaningController.text);
                             // _meaningController.clear();
+                          },
                             onSaved: (value) {
                               _definition = value ?? '';
                             }
-                          },
                         ),
                         if (_isLoading) // Only show the loading indicator when isLoading is true
                           const PositionedLoadingWidget(),

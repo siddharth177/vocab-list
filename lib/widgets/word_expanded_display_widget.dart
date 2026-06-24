@@ -73,7 +73,7 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                       ),
                     ],
                   ),
-                  if (word.wordMeaning.wordClass != WordClass.none) 
+                  if (widget.wordMeaning.wordClass != WordClass.none)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Chip(
@@ -81,10 +81,11 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                           widget.wordMeaning.wordClass.name,
                           style: GoogleFonts.poppins(fontSize: 12),
                         ),
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                          side: BorderSide.none,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primaryContainer,
+                        side: BorderSide.none,
                       ),
-                    )
+                    ),
                   if (widget.wordMeaning.definition.isNotEmpty)
                     Text(widget.wordMeaning.definition,
                         style: GoogleFonts.poppins(

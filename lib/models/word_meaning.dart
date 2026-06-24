@@ -47,7 +47,7 @@ class WordMeaning {
             data?['examples'] is Iterable ? List.from(data?['examples']) : [],
         wordClass: _parseWordClass(data?['wordClass']),
         root: data?['root'] ?? '',
-        phonetic: data?['phonetic']) ?? ''';
+        phonetic: data?['phonetic'] ?? '');
   }
 
   Map<String, dynamic> toFirestore() {

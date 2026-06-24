@@ -54,7 +54,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(=
+      appBar: AppBar(
         title: Row(
           children: [
             const Expanded(
@@ -112,7 +112,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
           }
 
           if (!vocabSnapshots.hasData || vocabSnapshots.data!.docs.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -124,14 +124,14 @@ class _WordsListScreenState extends State<WordsListScreen> {
                   const SizedBox(height: 16),
                   Text(
                     'Your vocab list is empty',
-                    style: Theme.of(context).textTheme.titleMedium?.coptyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface.withOpacity(0.45),
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     'Tap + to add your first word',
-                      style: Theme.of(context).textTheme.bodyMedium?.coptyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface.withOpacity(0.45),
                     ),
                   )
