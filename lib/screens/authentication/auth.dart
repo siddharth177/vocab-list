@@ -71,7 +71,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         height: 1.2,
                         fontFamily: GoogleFonts.openSans().fontFamily,
                         fontWeight: FontWeight.w300,
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                   ),

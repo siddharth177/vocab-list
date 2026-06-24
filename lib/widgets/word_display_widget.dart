@@ -30,7 +30,7 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
         return AddWordWidget(
           word: widget.wordMeaning.word,
           root: widget.wordMeaning.root,
-          phonatic: widget.wordMeaning.phonatic,
+          phonetic: widget.wordMeaning.phonetic,
           wordClass: widget.wordMeaning.wordClass,
           examples: widget.wordMeaning.examples,
           usages: widget.wordMeaning.usages,
@@ -83,9 +83,9 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
             motion: const DrawerMotion(),
             dismissible: DismissiblePane(
               onDismissed: () {
-                FirebaseFirestore.instance
+                firestoreInstance
                     .collection('users')
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .doc(firebaseAuthInstance.currentUser!.uid)
                     .collection('vocabList')
                     .doc(widget.wordMeaning.word)
                     .delete();
@@ -94,9 +94,9 @@ class _WordDisplayWidgetState extends State<WordDisplayWidget> {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  FirebaseFirestore.instance
+                  firestoreInstance
                       .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .doc(firebaseAuthInstance.currentUser!.uid)
                       .collection('vocabList')
                       .doc(widget.wordMeaning.word)
                       .delete();

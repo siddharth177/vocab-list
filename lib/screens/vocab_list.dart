@@ -21,16 +21,15 @@ class _WordsListScreenState extends State<WordsListScreen> {
   List<WordMeaning> _vocabList = [];
   List<WordMeaning> _filteredVocabList = [];
 
-  TextEditingController _controller = TextEditingController();
-
   @override
   void dispose() {
-    _controller.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
 
   String _query = '';
+  final SearchController _searchController = SearchController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class _WordsListScreenState extends State<WordsListScreen> {
           return AddWordWidget(
             word: '',
             root: '',
-            phonatic: '',
+            phonetic: '',
             wordClass: WordClass.none,
             examples: [],
             usages: [],
@@ -55,15 +54,10 @@ class _WordsListScreenState extends State<WordsListScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 150,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+      appBar: AppBar(=
+        title: Row(
           children: [
-            Row(
-              children: [
-                const Expanded(
+            const Expanded(
                   child: Text(
                     'My Vocab List',
                     style: TextStyle(
@@ -78,29 +72,32 @@ class _WordsListScreenState extends State<WordsListScreen> {
                 PopMenuWidget(),
               ],
             ),
-            const SizedBox(
-              height: 10,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(64),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12,0,12,12),
+                child: SearchBar(
+                  controller: _searchController,
+                  hintText: 'search your word',
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+                  onChanged: (query) {
+                    setState(() {
+                      _query = query;
+                    });
+                  },
+                  trailing: [
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _query = '';
+                            _searchController.clear();
+                          });
+                        },
+                        icon: const Icon(Icons.clear)),
+                  ],
+              ),
             ),
-            SearchBar(
-              hintText: 'search your word',
-              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10))),
-              onChanged: (query) {
-                setState(() {
-                  _query = query;
-                });
-              },
-              trailing: [
-                IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _query = '';
-                      });
-                    },
-                    icon: const Icon(Icons.clear)),
-              ],
-            ),
-          ],
         ),
       ),
       body: StreamBuilder(
@@ -116,7 +113,30 @@ class _WordsListScreenState extends State<WordsListScreen> {
 
           if (!vocabSnapshots.hasData || vocabSnapshots.data!.docs.isEmpty) {
             return const Center(
-              child: Text('No data'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.menu_book_outlined,
+                    size: 72,
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Your vocab list is empty',
+                    style: Theme.of(context).textTheme.titleMedium?.coptyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.45),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Tap + to add your first word',
+                      style: Theme.of(context).textTheme.bodyMedium?.coptyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.45),
+                    ),
+                  )
+                ]
+              ),
             );
           }
 

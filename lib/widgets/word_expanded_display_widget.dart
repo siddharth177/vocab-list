@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:vocab_list/models/word_meaning.dart';
 import 'package:vocab_list/utils/colors_and_theme.dart';
 
-import '../services/speack_aloud.dart';
+import '../services/speak_aloud.dart';
 
 class DisplayVocabListElement extends StatefulWidget {
   const DisplayVocabListElement({required this.wordMeaning, super.key});
@@ -73,6 +73,18 @@ class _DisplayVocabListElementState extends State<DisplayVocabListElement> {
                       ),
                     ],
                   ),
+                  if (word.wordMeaning.wordClass != WordClass.none) 
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Chip(
+                        label: Text(
+                          widget.wordMeaning.wordClass.name,
+                          style: GoogleFonts.poppins(fontSize: 12),
+                        ),
+                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                          side: BorderSide.none,
+                      ),
+                    )
                   if (widget.wordMeaning.definition.isNotEmpty)
                     Text(widget.wordMeaning.definition,
                         style: GoogleFonts.poppins(

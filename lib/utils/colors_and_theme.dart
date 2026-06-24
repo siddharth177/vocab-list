@@ -55,8 +55,8 @@ var kDarkThemeData = kLightThemeData.copyWith(
   scaffoldBackgroundColor: kDarkBlackShade2,
   brightness: Brightness.dark,
   searchBarTheme: const SearchBarThemeData().copyWith(
-      backgroundColor: MaterialStateProperty.all<Color>(kDarkBlackShade2),
-      textStyle: MaterialStateProperty.all(const TextStyle().copyWith(
+      backgroundColor: WidgetStateProperty.all<Color>(kDarkBlackShade2),
+      textStyle: WidgetStateProperty.all(const TextStyle().copyWith(
           color: kDarkWhiteShade1
       ))
   ),
@@ -79,7 +79,7 @@ var kDarkThemeData = kLightThemeData.copyWith(
   ),
   dropdownMenuTheme: const DropdownMenuThemeData().copyWith(
     menuStyle: MenuStyle(
-      backgroundColor: MaterialStateProperty.all(kDarkBlackShade2),
+      backgroundColor: WidgetStateProperty.all(kDarkBlackShade2),
     ),
     textStyle: TextStyle(
       color: kDarkWhiteShade1

@@ -22,7 +22,7 @@ class WordMeaning {
   List<String> examples = [];
   WordClass wordClass = WordClass.none;
   String root = '';
-  String phonatic = '';
+  String phonetic = '';
 
   WordMeaning({
     required this.word,
@@ -31,21 +31,8 @@ class WordMeaning {
     required this.examples,
     required this.wordClass,
     required this.root,
-    required this.phonatic,
+    required this.phonetic,
   }) : id = uuid.v4();
-
-  WordMeaning.word(this.word) : id = uuid.v4();
-
-  WordMeaning.definition(this.word, this.definition) : id = uuid.v4();
-
-  WordMeaning.usages(this.word, this.definition, this.usages) : id = uuid.v4();
-
-  WordMeaning.examples(this.word, this.definition, this.usages, this.examples)
-      : id = uuid.v4();
-
-  WordMeaning.wordClass(
-      this.word, this.definition, this.usages, this.examples, this.wordClass)
-      : id = uuid.v4();
 
   factory WordMeaning.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -58,23 +45,9 @@ class WordMeaning {
         usages: data?['usages'] is Iterable ? List.from(data?['usages']) : [],
         examples:
             data?['examples'] is Iterable ? List.from(data?['examples']) : [],
-        wordClass: (data?['wordClass'] == 'verb')
-            ? WordClass.verb
-            : (data?['wordClass'] == 'noun')
-                ? WordClass.noun
-                : (data?['wordClass'] == 'determiner')
-                    ? WordClass.determiner
-                    : (data?['wordClass'] == 'adjective')
-                        ? WordClass.adjective
-                        : (data?['wordClass'] == 'adverb')
-                            ? WordClass.adverb
-                            : (data?['wordClass'] == 'preposition')
-                                ? WordClass.preposition
-                                : (data?['wordClass'] == 'conjunction')
-                                    ? WordClass.conjunction
-                                    : WordClass.none,
-        root: data?['root'],
-        phonatic: data?['phonatic']);
+        wordClass: _parseWordClass(data?['wordClass']),
+        root: data?['root'] ?? '',
+        phonetic: data?['phonetic']) ?? ''';
   }
 
   Map<String, dynamic> toFirestore() {
@@ -85,7 +58,15 @@ class WordMeaning {
       'examples': examples,
       'wordClass': wordClass.name,
       'root': root,
-      'phonatic': phonatic
+      'phonetic': phonetic
     };
+  }
+
+  static WordClass _parseWordClass(String? name) {
+    try {
+        return WordClass.values.byName(name ?? '');
+    } catch (_) {
+        return WordClass.none;
+    }
   }
 }

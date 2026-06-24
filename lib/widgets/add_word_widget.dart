@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vocab_list/services/word_details.dart';
-import 'package:vocab_list/services/speack_aloud.dart';
+import 'package:vocab_list/services/speak_aloud.dart';
 import 'package:vocab_list/utils/colors_and_theme.dart';
 import 'package:vocab_list/utils/snackbar_messaging.dart';
-import 'package:vocab_list/widgets/postioned_loading_widget.dart';
+import 'package:vocab_list/widgets/positioned_loading_widget.dart';
 
 import '../models/word_meaning.dart';
 import '../utils/firebase.dart';
@@ -13,7 +13,7 @@ class AddWordWidget extends StatefulWidget {
       {super.key,
       required this.word,
       required this.root,
-      required this.phonatic,
+      required this.phonetic,
       required this.wordClass,
       required this.examples,
       required this.usages,
@@ -21,7 +21,7 @@ class AddWordWidget extends StatefulWidget {
       required this.isEdit});
 
   String word = '';
-  String phonatic = '';
+  String phonetic = '';
   String root = '';
   WordClass wordClass = WordClass.none;
   String definition = '';
@@ -38,7 +38,7 @@ class AddWordWidget extends StatefulWidget {
 class _AddWordWidgetState extends State<AddWordWidget> {
   final _formKey = GlobalKey<FormState>();
   String _word = '';
-  String _phonatic = '';
+  String _phonetic = '';
   String _root = '';
   WordClass _wordClass = WordClass.none;
   String _definition = '';
@@ -53,7 +53,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
   void initState() {
     super.initState();
     _word = widget.word;
-    _phonatic = widget.phonatic;
+    _phonetic = widget.phonetic;
     _root = widget.root;
     _wordClass = widget.wordClass;
     _definition = widget.definition;
@@ -65,14 +65,14 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
     _definitionController.text = _definition;
     _wordController.text = _word;
-    // _phonaticController.text = _phonatic;
+    // _phoneticController.text = _phonetic;
     _rootController.text = _root;
   }
 
   final TextEditingController _wordController = TextEditingController();
   final TextEditingController _rootController = TextEditingController();
 
-  // final TextEditingController _phonaticController = TextEditingController();
+  // final TextEditingController _phoneticController = TextEditingController();
   final TextEditingController _definitionController = TextEditingController();
   final TextEditingController _usageController = TextEditingController();
   final TextEditingController _exampleController = TextEditingController();
@@ -88,7 +88,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
         examples: _examples,
         wordClass: _wordClass,
         root: _root,
-        phonatic: _phonatic,
+        phonetic: _phonetic,
       );
 
       var uid = firebaseAuthInstance.currentUser?.uid;
@@ -108,7 +108,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
   void _clearEntries() {
     _wordController.clear();
-    // _phonaticController.clear();
+    // _phoneticController.clear();
     _rootController.clear();
     _definitionController.clear();
     _exampleController.clear();
@@ -116,7 +116,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
     setState(() {
       _word = '';
-      _phonatic = '';
+      _phonetic = '';
       _root = '';
       _wordClass = WordClass.none;
       _definition = '';
@@ -140,7 +140,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
           'Details for $inputWord fetched from llama model successfully',
           duration: 2);
       _word = inputWord ?? '';
-      // _phonatic = wordData['phonetic'] ?? '';
+      // _phonetic = wordData['phonetic'] ?? '';
       _root = wordData['root'] ?? '';
       _wordClass = _getWordClassFromString(wordData['wordType']);
       _definition = wordData['definition'] ?? '';
@@ -148,7 +148,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
       _examples = (_getStringListFromApiData(wordData['examples']));
 
       _wordController.text = _word;
-      // _phonaticController.text = _phonatic;
+      // _phoneticController.text = _phonetic;
       _rootController.text = _root;
       _definitionController.text = _definition;
     } catch (e) {
@@ -202,9 +202,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
 
     return Container(
       padding: EdgeInsets.only(
-          top: MediaQueryData.fromView(WidgetsBinding.instance.window)
-              .padding
-              .top),
+          top: MediaQuery.of(context).padding.top),
       child: Scaffold(
         appBar: AppBar(
           title: Text(_popupTitle),
@@ -304,7 +302,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                                       foregroundColor:
                                           Theme.of(context).brightness ==
                                                   Brightness.dark
-                                              ? MaterialStateProperty.all(
+                                              ? widgetStateProperty.all(
                                                   kDarkWhiteShade2)
                                               : null,
                                     ),
@@ -316,7 +314,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                             },
                           ),
                           if (_isLoading) // Only show the loading indicator when isLoading is true
-                            const PostionedLoadingWidget(),
+                            const PositionedLoadingWidget(),
                         ],
                       ),
                     ),
@@ -339,7 +337,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                             },
                           ),
                           if (_isLoading) // Only show the loading indicator when isLoading is true
-                            const PostionedLoadingWidget(),
+                            const PositionedLoadingWidget(),
                         ],
                       ),
                     ),
@@ -369,10 +367,13 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                             // }
                             // _definition.add(_meaningController.text);
                             // _meaningController.clear();
+                            onSaved: (value) {
+                              _definition = value ?? '';
+                            }
                           },
                         ),
                         if (_isLoading) // Only show the loading indicator when isLoading is true
-                          const PostionedLoadingWidget(),
+                          const PositionedLoadingWidget(),
                       ],
                     ),
                     // Column(
@@ -411,7 +412,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                           },
                         ),
                         if (_isLoading) // Only show the loading indicator when isLoading is true
-                          const PostionedLoadingWidget(),
+                          const PositionedLoadingWidget(),
                       ],
                     ),
                     Column(
@@ -482,7 +483,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                           },
                         ),
                         if (_isLoading) // Only show the loading indicator when isLoading is true
-                          const PostionedLoadingWidget(),
+                          const PositionedLoadingWidget(),
                       ],
                     ),
                     Column(
@@ -536,10 +537,10 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       ElevatedButton(
                         onPressed: _onFormSubmit,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
+                          backgroundColor: WidgetStateProperty.all<Color>(
                               Theme.of(context).colorScheme.primaryContainer),
                           minimumSize:
-                              MaterialStateProperty.all<Size>(Size(20, 30)),
+                              WidgetStateProperty.all<Size>(Size(20, 30)),
                         ),
                         child: Text(_saveButton),
                       )
@@ -547,16 +548,16 @@ class _AddWordWidgetState extends State<AddWordWidget> {
                       ElevatedButton(
                         onPressed: _clearEntries,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
+                          backgroundColor: WidgetStateProperty.all<Color>(
                               kDarkQuaternaryColor),
-                          // minimumSize: MaterialStateProperty.all<Size>(Size(50,40)),
+                          // minimumSize: WidgetStateProperty.all<Size>(Size(50,40)),
                         ),
                         child: Text(_clearButton),
                       ),
                       ElevatedButton(
                         onPressed: _onFormSubmit,
                         style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
+                            backgroundColor: WidgetStateProperty.all<Color>(
                                 Theme.of(context)
                                     .colorScheme
                                     .primaryContainer)),

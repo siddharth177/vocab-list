@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
-class PostionedLoadingWidget extends StatefulWidget {
-  const PostionedLoadingWidget({super.key});
+class PositionedLoadingWidget extends StatefulWidget {
+  const PositionedLoadingWidget({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -10,7 +10,7 @@ class PostionedLoadingWidget extends StatefulWidget {
   }
 }
 
-class _PositionedLoadedWidgetState extends State<PostionedLoadingWidget> {
+class _PositionedLoadedWidgetState extends State<PositionedLoadingWidget> {
   @override
   Widget build(BuildContext context) {
     return const Positioned(

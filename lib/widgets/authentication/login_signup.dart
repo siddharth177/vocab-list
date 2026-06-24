@@ -17,7 +17,6 @@ class LoginSignUpWidget extends ConsumerStatefulWidget {
 
 class _LoginSignUpWidgetState extends ConsumerState<LoginSignUpWidget> {
   final _formKey = GlobalKey<FormState>();
-  bool _isLogin = true;
   var _enteredEmail = '';
   var _enteredPassword = '';
 
@@ -28,8 +27,9 @@ class _LoginSignUpWidgetState extends ConsumerState<LoginSignUpWidget> {
     }
 
     _formKey.currentState!.save();
+    final isLogin = ref.read(isLoginProvider);
     try {
-      if (_isLogin) {
+      if (isLogin) {
         final userCredentials =
             await firebaseAuthInstance.signInWithEmailAndPassword(
                 email: _enteredEmail, password: _enteredPassword);
@@ -46,7 +46,7 @@ class _LoginSignUpWidgetState extends ConsumerState<LoginSignUpWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoginNotifier = ref.watch(isLoginProvider.notifier);
+    final isLogin = ref.watch(isLoginProvider);
     return Form(
       key: _formKey,
       child: Column(
@@ -79,7 +79,7 @@ class _LoginSignUpWidgetState extends ConsumerState<LoginSignUpWidget> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
               if (value == null || value.trim().length <= 6) {
-                return 'Password must be atleast 6 character long.';
+                return 'Password must be at least 6 character long.';
               }
 
               if (value.trim().length > 8) {
@@ -95,7 +95,7 @@ class _LoginSignUpWidgetState extends ConsumerState<LoginSignUpWidget> {
           const SizedBox(
             height: 20,
           ),
-          _isLogin
+          isLogin
               ? ElevatedButton(
                   onPressed: () {
                     ref
@@ -113,18 +113,15 @@ class _LoginSignUpWidgetState extends ConsumerState<LoginSignUpWidget> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             ),
-            child: Text(_isLogin ? 'Login' : 'Signup'),
+            child: Text(isLogin ? 'Login' : 'Signup'),
           ),
           const SizedBox(height: 5),
           TextButton(
             onPressed: () {
-              setState(() {
-                _isLogin = !_isLogin;
-                isLoginNotifier.updateLoginFlag(_isLogin);
-              });
+              ref.read(isLoginProvider.notifier).updateLoginFlag(!isLogin);
             },
             child: Text(
-                _isLogin ? 'Create an account' : 'I already have an account'),
+                isLogin ? 'Create an account' : 'I already have an account'),
           ),
         ],
       ),
