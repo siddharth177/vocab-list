@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vocab_list/providers/secrets_provider.dart';
 import 'package:vocab_list/services/word_details.dart';
 import 'package:vocab_list/services/speak_aloud.dart';
 import 'package:vocab_list/utils/colors_and_theme.dart';
@@ -8,7 +10,7 @@ import 'package:vocab_list/widgets/positioned_loading_widget.dart';
 import '../models/word_meaning.dart';
 import '../utils/firebase.dart';
 
-class AddWordWidget extends StatefulWidget {
+class AddWordWidget extends ConsumerStatefulWidget {
   AddWordWidget(
       {super.key,
       required this.word,
@@ -30,12 +32,12 @@ class AddWordWidget extends StatefulWidget {
   bool isEdit = false;
 
   @override
-  State<AddWordWidget> createState() {
+  ConsumerState<AddWordWidget> createState() {
     return _AddWordWidgetState();
   }
 }
 
-class _AddWordWidgetState extends State<AddWordWidget> {
+class _AddWordWidgetState extends ConsumerState<AddWordWidget> {
   final _formKey = GlobalKey<FormState>();
   String _word = '';
   String _phonetic = '';
@@ -135,7 +137,8 @@ class _AddWordWidgetState extends State<AddWordWidget> {
     });
 
     try {
-      final wordData = await getWordData(inputWord);
+      final apiKey = await ref.read(groqApiKeyProvider.future);
+      final wordData = await getWordData(inputWord, apiKey);
       clearAndDisplaySnackbar(context,
           'Details for $inputWord fetched from llama model successfully',
           duration: 2);
@@ -152,6 +155,7 @@ class _AddWordWidgetState extends State<AddWordWidget> {
       _rootController.text = _root;
       _definitionController.text = _definition;
     } catch (e) {
+      debugPrint('Error fetching word data: $e');
       clearAndDisplaySnackbar(
           context, 'failed to load details for $inputWord from llama model.',
           duration: 2);

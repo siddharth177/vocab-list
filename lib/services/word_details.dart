@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:vocab_list/utils/secrets.dart';
 
-Future<Map<String, dynamic>> getWordData(String word) async {
+Future<Map<String, dynamic>> getWordData(String word, String apiKey) async {
   final url = Uri.parse('https://api.groq.com/openai/v1/chat/completions');
   final headers = {
-     'Authorization': groqApiKey,
+    'Authorization': 'Bearer $apiKey',
     'Content-Type': 'application/json',
   };
   final body = json.encode({

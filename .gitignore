@@ -46,4 +46,5 @@ app.*.map.json
 
 
 #secrets
-lib/utils/secrets.dart
+lib/env/env.dart
+secrets.env
